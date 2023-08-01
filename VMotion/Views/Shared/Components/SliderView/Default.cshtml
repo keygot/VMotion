@@ -1,0 +1,63 @@
+﻿@using VMotion.Models;
+@using VMotion.Utilities;
+
+@model IList<TblSlider>
+
+<div class="slider">
+    @foreach(var sl in Model.OrderBy(m => m.SliderOrder).ToList()) {
+        @*string url = Functions.TitleSlugGeneration("slider", sl.Title, sl.SliderId);*@
+        string url = Functions.TitleSlugGeneration("list", sl.Title, sl.MovieId);
+
+    <div class="slider-wrap fade">
+        <div class="slider__backdrop">
+            <div class="slider__backdrop-img">
+                <img src="@sl.ImgBgmin"
+                     alt="@sl.Title"
+                     title="@sl.Title">
+            </div>
+            <div class="slider__backdrop-video">
+                <img src="@sl.ImgBgmax" />
+            </div>
+        </div>
+
+        <div class="slider__overlay"></div>
+
+        <div class="slider__content">
+            <div class="slider__content-main">
+                <img src="@sl.ImgName" alt="" class="slider__content-title">
+                <div class="slider__content-info">
+                    <div class="slider__content-year">@sl.Title</div>
+                    <div class="slider__content-update">
+                        Tập @sl.Episodes
+
+                   </div>
+                </div>
+
+                <p class="slider__content-description">
+                    @sl.Abstract
+                </p>
+                <div class="slider__content-btns">
+                    <a href="/@url" class="slider__content-btn--play">
+                        <i class="fa fa-play-circle" aria-hidden="true"></i>
+                        <span>Xem ngay</span>
+                    </a>
+
+                    <a href="#" class="slider__content-btn--add">
+                        <i class="far fa-bookmark">
+                            <i class="fas fa-plus"></i>
+                        </i>
+                        <span>Thêm vào lưu trữ</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+        
+    }
+    
+
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>

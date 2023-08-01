@@ -1,0 +1,109 @@
+﻿@using VMotion.Utilities
+@model IList<ViewMoive>
+
+@if (Model.Any(item => item.Comingsoon == true  && item.ComingsoonDate != null))
+{
+    <section class="container-section">
+        <div class="container_title">Phim sắp ra mắt</div>
+        <div id="comingsoon" class="carousel carousel-comingsoon">
+            <button class="carousel_btn-prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="carousel-wrap swiper mySwiper">
+                <div class="carousel-move swiper-wrapper row">
+                    @foreach (var item in Model)
+                    {
+                        string url = Functions.TitleSlugGeneration("list", item.MovieName, item.MovieId);
+                        <a href="/@url" class="swiper-slide carousel_item col l-2-4 m-3 c-4">
+                            <div class="carousel-comingsoon_timeline">
+                                <div class="comingsoon_timeline-line"></div>
+                                <div class="comingsoon_timeline-point"></div>
+                                
+                                    <div class="comingsoon_timeline-time">
+                                        <p class="comingsoon_timeline-date" style="line-height: 1.5rem;">
+                                            @if (item.ComingsoonDate != null)
+                                            {
+                                                @Functions.ConvertDateFormat(item.ComingsoonDate.Value)
+                                            }
+                                        </p>
+                                        <p class="comingsoon_timeline-day">
+                                            @if (item.ComingsoonDate != null)
+                                            {
+                                                @Functions.GetDayOfWeek(item.ComingsoonDate.Value)
+
+                                            }
+                                        </p>
+                                    </div>
+                                
+                            </div>
+                            <div class="carousel-comingsoon_poster">
+                                <div class="comingsoon_poster-img-wrap">
+                                    <img src="@item.ImgMin" alt="">
+                                    <div class="comingsoon_poster-img-overlay">
+                                        <div class="btns-play-and-add">
+                                            <span class="btn-play">
+                                                <i class="fas fa-play"></i>
+                                            </span>
+                                            <span class="btn-add">
+                                                <i class="far fa-bookmark">
+                                                    <i class="fas fa-plus"></i>
+                                                </i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comingsoon_poster-content">
+                                    <div class="comingsoon_poster-title">@item.MovieName</div>
+                                    <div class="comingsoon_poster-hagtag">
+                                        <span>Tiếng Hàn</span>
+                                        <span>movie.hagtag</span>
+                                    </div>
+                                    <div class="comingsoon_poster-info">
+                                        <p>
+                                            <span>Đạo diễn: </span>
+                                            @foreach (var director in item.MovieDirectors)
+                                            {
+                                                @if (director.Director != null)
+                                                {
+                                                    @director.Director.FullName
+                                                    @if (director != item.MovieDirectors.Last())
+                                                    {
+                                                        @: ,
+                                                    }
+                                                }
+                                            }
+                                        </p>
+                                        <p>
+                                            <span>Diễn viên: </span>
+                                            @foreach (var actor in item.MovieActors)
+                                            {
+                                                @if (actor.Actor != null)
+                                                {
+                                                    @actor.Actor.FullName
+                                                    @if (actor != item.MovieActors.Last())
+                                                    {
+                                                        @: ,
+                                                    }
+                                                }
+                                            }
+                                        </p>
+                                        <p>
+                                            <span>Miêu tả: </span>@Html.Raw(item.Description)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-comingsoon_title">
+                                <p>@item.MovieName</p>
+                            </div>
+                        </a>
+                    }
+
+                </div>
+            </div>
+            <button class="carousel_btn-next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+}

@@ -1,0 +1,368 @@
+﻿@model VMotion.Models.TblMovie
+@{
+    ViewData["Title"] = "Xem chi tiết phim: " + @Model.MovieName;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="AdminMovies" asp-action="Index">Danh sách phim</a></li>
+            <li class="breadcrumb-item active">Xem chi tiết phim: @Model.MovieName</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+<hr />
+<div class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">Xem chi tiết phim: @Model.MovieName</h1>
+
+                    <div class="tab-content pt-2">
+                        <div class="tab-pane fade show active" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab">
+                            <!-- Vertical Form -->
+                            <form class="row g-3" asp-area="Admin" asp-controller="AdminMovies" asp-action="Details" method="post" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="col-6">
+                                    <label for="inputNanme4" class="form-label"><strong>Tên phim</strong></label>
+                                    <input type="text" class="form-control" asp-for="MovieName" id="title" disabled>
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="inputPassword4" class="form-label"><strong>Liên kết (Nếu có)</strong></label>
+                                    <input type="text" class="form-control" asp-for="Link" id="slideOrder" disabled>
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="inputEmail4" class="form-label"><strong>Danh mục</strong></label>
+                                    <select class="form-select" id="selectMovie" aria-label="Default select example" asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.CategoryList, "Value", "Text"))" disabled>
+                                    </select>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <legend class="col-form-label col-sm-2 pt-0"><strong>Thể loại</strong></legend>
+
+                                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-heading3">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse3" aria-expanded="false" aria-controls="flush-collapse3" style="border: 1px solid #ced4da; border-radius: 0.375rem; padding: 10px 18px;">
+                                                            <strong>Chọn thể loại</strong>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapse3" class="accordion-collapse collapse" aria-labelledby="flush-heading3" data-bs-parent="#accordionFlushExample" style="">
+                                                        <ul class="list-group">
+                                                            @foreach (var genre in ViewBag.GenreList)
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <input class="form-check-input me-1" name="Genres" type="checkbox" id="genre-@genre.Value" value="@genre.Value" aria-label="..." disabled>
+                                                                    @genre.Text
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <legend class="col-form-label col-sm-2 pt-0"><strong>Đạo diễn</strong></legend>
+
+                                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-headingOne">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" style="border: 1px solid #ced4da; border-radius: 0.375rem; padding: 10px 18px;">
+                                                            <strong>Chọn đạo diễn</strong>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                                                        <ul class="list-group">
+                                                            @foreach (var director in ViewBag.DirectorList)
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <input class="form-check-input me-1" name="Directors" type="checkbox" id="genre-@director.Value" value="@director.Value" aria-label="..." disabled>
+                                                                    @director.Text
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <legend class="col-form-label col-sm-2 pt-0"><strong>Diễn viên</strong></legend>
+
+                                            <div class="accordion accordion-flush" id="accordionFlushExampl">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-heading2">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse2" aria-expanded="false" aria-controls="flush-collapse2" style="border: 1px solid #ced4da; border-radius: 0.375rem; padding: 10px 18px;">
+                                                            <strong>Chọn diễn viên</strong>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapse2" class="accordion-collapse collapse" aria-labelledby="flush-heading2" data-bs-parent="#accordionFlushExampl" style="">
+                                                        <ul class="list-group">
+                                                            @foreach (var actor in ViewBag.ActorList)
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <input class="form-check-input me-1" name="Actors" type="checkbox" id="genre-@actor.Value" value="@actor.Value" aria-label="..." disabled>
+                                                                    @actor.Text
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-6">
+
+                                    <legend class="col-form-label col-sm-6 pt-0"><strong>Hình ảnh #1</strong></legend>
+
+                                    <!-- Default Accordion -->
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                    Hình ảnh lớn
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                                                <div class="accordion-body">
+                                                    @if(Model.ImgMax != null) {
+                                                    
+                                                        <img src="@Model.ImgMax" alt="" style="width: 100%;"/>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    Hình ảnh nhỏ
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample" style="">
+                                                <div class="accordion-body">
+                                                    @if(Model.ImgMin != null) {
+                                                    
+                                                        <img src="@Model.ImgMin" alt="" style="width: 50%;"/>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingThree">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    Hình ảnh nền
+                                                </button>
+                                            </h2>
+                                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample" style="">
+                                                <div class="accordion-body">
+                                                    @if(Model.ImgBG != null) {
+                                                    
+                                                        <img src="@Model.ImgBG" alt="" style="width: 100%;"/>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- End Default Accordion Example -->
+
+
+
+                                </div>
+
+                                <div class="col-6">
+
+                                    <legend class="col-form-label col-sm-6 pt-0"><strong>Hình ảnh #2</strong></legend>
+
+                                    <!-- Default Accordion -->
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne-1">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-1" aria-expanded="false" aria-controls="collapseOne-1">
+                                                    Hình ảnh xếp hạng
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne-1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                                                <div class="accordion-body">
+                                                    @if (Model.RankIMG != null)
+                                                    {
+
+                                                        <img src="@Model.RankIMG" alt="" style="width: 100%;" />
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo-2">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo-2" aria-expanded="false" aria-controls="collapseTwo-2">
+                                                    Hình ảnh số xếp hạng
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo-2" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample" style="">
+                                                <div class="accordion-body">
+                                                    @if (Model.RankNumber != null)
+                                                    {
+
+                                                        <img src="@Model.RankNumber" alt="" style="width: 50%;" />
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingThree-3">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree-3" aria-expanded="false" aria-controls="collapseThree-3">
+                                                    Hình ảnh #3
+                                                </button>
+                                            </h2>
+                                            <div id="collapseThree-3" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample" style="">
+                                                <div class="accordion-body">
+                                                    @if (Model.PosterIMG != null)
+                                                    {
+
+                                                        <img src="@Model.PosterIMG" alt="" style="width: 50%;" />
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- End Default Accordion Example -->
+
+
+
+                                </div>
+
+                                 <div class="col-12">
+
+                                    <legend class="col-form-label col-sm-6 pt-0"><strong>Video #</strong></legend>
+
+                                    <!-- Default Accordion -->
+                                    <div class="accordion" id="accordionExample-video">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne-video">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-video" aria-expanded="false" aria-controls="collapseOne-video">
+                                                    Video Trailer
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne-video" class="accordion-collapse collapse" aria-labelledby="headingOne-video" data-bs-parent="#accordionExample-video" style="">
+                                                <div class="accordion-body">
+                                                    @if (Model.Trailer != null)
+                                                    {
+
+                                                        <video src="@Model.Trailer"  style="width: 100%;" controls/>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div><!-- End Default Accordion Example -->
+
+
+
+                                </div>
+
+
+                                <div class="col-6">
+                                    <label for="inputPassword4" class="form-label"><strong>Ngày phát hành</strong></label>
+                                    <input type="date" class="form-control" asp-for="ReleaseDate" id="slideOrder" disabled>
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="inputPassword4" class="form-label"><strong>Ngày ra mắt</strong></label>
+                                    <input type="date" class="form-control" asp-for="ComingsoonDate" id="slideOrder" disabled>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="inputAddress" class="form-label"><strong>Mô tả về phim</strong></label>
+                                    <div class="col-sm-12">
+                                        <textarea id="Description" asp-for="Description" disabled></textarea>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-6">
+                                    <label for="inputAddress" class="form-label"><strong>Kiểu hiển thị</strong></label>
+                                    <div class="col-sm-10">
+                                        <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                            <input asp-for="Popular" class="form-check-input" type="checkbox" id="isActive" disabled>
+                                            <label class="form-check-label">Phổ biến</label>
+                                        </div>
+                                        <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                            <input asp-for="Rank" class="form-check-input" type="checkbox" id="isActive" disabled>
+                                            <label class="form-check-label">Xếp hạng</label>
+                                        </div>
+                                        <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                            <input asp-for="Comingsoon" class="form-check-input" type="checkbox" id="isActive" disabled>
+                                            <label class="form-check-label">Phim sắp ra mắt</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="inputAddress" class="form-label"><strong>Trạng thái</strong></label>
+                                    <div class="col-sm-10">
+                                        <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                            <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActive" disabled>
+                                            <label class="form-check-label">Công khai</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="col-sm-12">
+                                        <input type="submit" value="Quay lại" asp-area="Admin" asp-controller="AdminMovies" asp-action="Index" class="btn btn-primary" />
+                                    </div>
+
+                                </div>
+
+                            </form><!-- Vertical Form -->
+
+
+
+                        </div>
+
+
+                    </div><!-- End Bordered Tabs Justified -->
+                    <!-- General Form Elements -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        var summerNote = new VMotion.Areas.Admin.Models.SummerNote("#Description");
+
+    <partial name="_SummerNote" model="summerNote" />
+    }
+
+
+
+}
+

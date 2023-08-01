@@ -1,0 +1,635 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<VMotion.Models.TblCategory>
+
+@{
+
+    ViewData["Title"] = "Danh sách danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div id="toastsContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1999;"></div>
+
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Danh sách danh mục : Trang @ViewBag.CurrentPage</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body" style="padding: 50px ;">
+                    <div class="row m-b-30" style="align-items: center; margin-bottom: 30px !important;">
+                        <div class="col-md-8">
+                            <div class="row" style="display: flex; align-items: center;">
+
+
+                                <div class="col-md-6 mb-3 header" style="box-shadow: none !important; display: flex; justify-content: center; align-items: center; z-index: 0 !important;">
+
+
+                                    <div class="search-bar" style="padding: 0 8px !important;">
+                                        <form class="search-form d-flex align-items-center" method="POST" action="#">
+                                            <input type="text" id="keyword" name="keyword" placeholder="Tìm kiếm" title="Enter search keyword">
+                                            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+
+
+                                    <select asp-items="ViewBag.DanhMuc" id="txtCategoryID" name="txtCategoryID" class="form-select" aria-label="Default select example">
+                                        <option value="0" selected="" disabled="">Chọn danh mục</option>
+
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" style="text-align: right !important;">
+
+
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" id="btnAdd" data-bs-target="#largeModal"><i class="bi bi-plus"></i> Thêm mới</button>
+
+                            @*THÊM MỚI DANH MỤC *@
+                            <div class="modal fade" id="largeModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background: #0d6efd;">
+                                            <h5 class="modal-title"><strong style="color: #ffff;" id="modal-title"></strong></h5>
+                                            <button type="button" style="color: #ffff;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" style="text-align: left;">
+                                            <div class="col-lg-12">
+
+
+                                                <!-- Vertical Form -->
+                                                <form class="row g-3">
+                                                    <input hidden id="idCategory" type="text" value="" />
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Tên danh mục</strong></label>
+                                                        <input type="text" class="form-control" id="categoryName">
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Mô tả ngắn</strong></label>
+                                                        <input type="text" class="form-control" id="shortName">
+                                                    </div>
+
+
+                                                    <div class="col-6">
+                                                        <label for="inputPassword4" class="form-label"><strong>Thứ tự</strong></label>
+                                                        <input type="number" class="form-control" id="categoryOrder">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputAddress" class="form-label"><strong>Mô tả thêm (Nếu có)</strong></label>
+                                                        <input type="text" class="form-control" id="description">
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label for="inputAddress" class="form-label"><strong>Trạng thái</strong></label>
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                                                <input class="form-check-input" type="checkbox" id="isActive">
+                                                                <label for="IsActive" class="form-check-label">Công khai</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-6">
+                                                        <label for="inputAddress" class="form-label"><strong>Hiển thị trang chủ</strong></label>
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                                                <input class="form-check-input" type="checkbox" id="homeFlag">
+                                                                <label for="IsActive" class="form-check-label">Công khai</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </form><!-- Vertical Form -->
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" id="btnAddCategory">Lưu lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Large Modal-->
+
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover e-commerce-table" style="margin-bottom: 50px !important;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 1rem !important;">ID</th>
+                                    <th style="padding: 1rem !important;">Tên </th>
+                                    <th style="padding: 1rem !important;">Mô tả ngắn</th>
+
+                                    <th style="padding: 1rem !important;">Thứ tự</th>
+                                    <th style="padding: 1rem !important;">Trạng thái</th>
+                                    <th style="padding: 1rem !important;">Trang chủ</th>
+                                    <th style="padding: 1rem !important;">Chức năng</th>
+
+
+
+                                </tr>
+                            </thead>
+
+                            @*// Danh sách danh mục*@
+                            <tbody id="dsCategory" style="vertical-align:-webkit-baseline-middle !important;">
+
+                                @*Hàm LoadDsCategory() sẽ hiển thị ở đây*@
+
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" id="phanTrang">
+                            </ul>
+                        </nav>
+                        @*<nav aria-label="Page navigation example">
+
+                        @* @if(Model.PageCount > 1) {
+                        <pager class="pager-container" list="@Model" asp-area="Admin" asp-controller="AdminCategory" asp-action="Index" asp-route-categoryId="ViewBag.CurrentcategoryId" options="PagedListRenderOptions.Bootstrap4PageNumbersOnly" />
+
+                        }
+
+                        </nav>*@
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+@section Scripts {
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+
+        //
+
+        var trang = 1;
+
+        $(document).ready(function () {
+
+            // Load danh sách menu lên table
+            LoadDsCategory(trang);
+        });
+
+        // sự kiện click li phân trang
+        $('#phanTrang').on("click", "li", function (e) {
+            e.preventDefault(); // Bỏ mặc định link href
+            trang = $(this).text();
+            LoadDsCategory(trang);
+
+
+        });
+
+
+
+
+        // Load danh sách danh mục
+        function LoadDsCategory(trang) {
+
+            $.ajax({
+                url: '/Admin/AdminCategory/DsCategory',
+                type: 'GET',
+                data: {
+                    trang: trang,
+
+                },
+
+                success: function (data) {
+                    console.log(data);
+
+                    if (data.code == 200) {
+
+                        $('#dsCategory').empty();
+
+                        $.each(data.dsCategory, function (key, value) {
+                            let tr = '<tr id="' + value.categoryId + '">'
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.categoryId + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.categoryName + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.shortName + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.categoryOrder + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.isActive + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.homeFlag + '</td>';
+
+                            tr += '<td style="min-width: 150px !important;">';
+                            tr += '<a class="btn btn-primary btn-sm" name="xem" data-bs-toggle="modal" data-bs-target="#largeModal" title ="xem"><i class="ri-eye-line" > </i></a >';
+                            tr += '<a class="btn btn-success btn-sm" name="edit" data-bs-toggle="modal" data-bs-target="#largeModal" title ="sửa" style="margin: 0 5px !important;"><i class="ri-edit-2-line"></i></a >';
+                            tr += '<a class="btn btn-danger btn-sm" name="delete" title = "xóa"><i class="bi bi-trash"></i></a >';
+
+                            tr += '</td>';
+
+                            tr += '</tr>';
+
+                            $('#dsCategory').append(tr);
+                        });
+
+                        // Phân trang
+                        if (data.soTrang > 1) {
+                            $('#phanTrang').empty();
+
+                            for (i = 1; i <= data.soTrang; i++) {
+                                let li = '<li class="page-item" name="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+
+                                $('#phanTrang').append(li);
+                            }
+
+                            let li = $('#phanTrang').find('li[name="' + trang + '"]');
+                            $(li).addClass('active');
+
+
+                            //if(trang == 1) {
+                            //    $('#phanTrang li:first').addClass('active');
+                            //}
+
+                        }
+                    }
+                }
+            });
+        }
+
+        // XÓA DANH MỤC
+        $(document).on('click', "a[name='delete']", function () {
+            let categoryId = $(this).closest('tr').attr('id');
+
+            if (confirm("Bạn có thực sự muốn xóa trường này không?")) {
+                // dùng ajax để xóa lớp được chọn
+                $.ajax({
+                    url: '/Admin/AdminCategory/Delete',
+                    type: 'POST',
+                    data: {
+                        id: categoryId,
+
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            //Xóa thành công
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            // Load lại ds
+                            LoadDsCategory();
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                    }
+                })
+            }
+        });
+
+        //// XEM CHI TIẾT DANH MỤC
+        $(document).on('click', "a[name='xem']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Thông tin chi tiết');
+            let categoryId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminCategory/Details',
+                type: 'GET',
+                data: {
+                    id: categoryId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+                        $('#categoryName').val(data.tblCategory.categoryName);
+                        $('#shortName').val(data.tblCategory.shortName);
+                        $('#categoryOrder').val(data.tblCategory.categoryOrder);
+                        $('#description').val(data.tblCategory.description);
+
+                        if ((data.tblCategory.isActive) == true) {
+                            $('#isActive').prop('checked', true);
+                        } else {
+                            $('#isActive').prop('checked', false);
+
+                        }
+
+                        if ((data.tblCategory.homeFlag) == true) {
+                            $('#homeFlag').prop('checked', true);
+                        } else {
+                            $('#homeFlag').prop('checked', false);
+
+                        }
+
+
+
+
+
+
+                        // Không cho chỉnh sửa dữ liệu
+                        $('#categoryName').prop('disabled', true); // Lấy id của menu đc chọn là menu cha
+                        $('#shortName').prop('disabled', true);
+                        $('#categoryOrder').prop('disabled', true);
+                        $('#description').prop('disabled', true);
+
+                        $('#homeFlag').prop('readonly', true);
+                        $('#isActive').prop('readonly', true);
+
+                        // Gán giá trị cho text hidden có giá trị là idCategory = categoryId
+                        $('#idCategory').val(categoryId);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddCategory').hide();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            })
+        });
+
+
+        //// Chỉnh sửa MENU
+        $(document).on('click', "a[name='edit']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Chỉnh sửa menu');
+            let categoryId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminCategory/Details',
+                type: 'GET',
+                data: {
+                    id: categoryId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+                        $('#categoryName').val(data.tblCategory.categoryName);
+                        $('#shortName').val(data.tblCategory.shortName);
+                        $('#categoryOrder').val(data.tblCategory.categoryOrder);
+                        $('#description').val(data.tblCategory.description);
+
+                        if ((data.tblCategory.isActive) == true) {
+                            $('#isActive').prop('checked', true);
+                        } else {
+                            $('#isActive').prop('checked', false);
+
+                        }
+
+                        if ((data.tblCategory.homeFlag) == true) {
+                            $('#homeFlag').prop('checked', true);
+                        } else {
+                            $('#homeFlag').prop('checked', false);
+
+                        }
+
+                        // Gán giá trị cho text hidden có giá trị là idCategory = categoryId
+                        $('#idCategory').val(categoryId);
+
+
+                        // Cho chỉnh sửa dữ liệu
+                        $('#categoryName').prop('disabled', false); // Lấy id của menu đc chọn là menu cha
+                        $('#shortName').prop('disabled', false);
+                        $('#categoryOrder').prop('disabled', false);
+                        $('#description').prop('disabled', false);
+
+                        $('#homeFlag').prop('readonly', false);
+                        $('#isActive').prop('readonly', false);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddCategory').show();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            })
+        });
+
+        $('#btnAdd').click(function () {
+            // gán title cho modal
+            $('#modal-title').text('Thêm mới');
+
+
+            // Làm trắng các input
+            $('#categoryName').val('');
+            $('#shortName').val('');
+            $('#categoryOrder').val('');
+            $('#description').val('');
+            $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+            $('#homeFlag').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+
+            $('#idCategory').val('');
+
+
+            //
+            // Cho chỉnh sửa dữ liệu
+            $('#categoryName').prop('disabled', false);
+            $('#shortName').prop('disabled', false);
+            $('#categoryOrder').prop('disabled', false);
+            $('#description').prop('disabled', false);
+            $('#homeFlag').prop('readonly', false);
+            $('#isActive').prop('readonly', false);
+
+            $('#btnAddCategory').show();
+
+        })
+
+        // THÊM MỚI MENU
+        // Sự kiện click của button xác nhận thêm mới menu
+        $('#btnAddCategory').click(function () {
+            // Lấy dữ diệu người dùng nhập vào
+            let categoryName = $('#categoryName').val().trim(); // Lấy id của menu đc chọn là menu cha
+            let shortName = $('#shortName').val().trim();
+            let categoryOrder = $('#categoryOrder').val().trim();
+            let description = $('#description').val().trim();
+            let isActive = $('#isActive').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+            let homeFlag = $('#homeFlag').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+
+
+
+
+            // Các ràng buộc dữ liệu
+
+            // Kiểm tra rỗng
+            if (categoryName.length == 0) {
+                alert('Vui lòng nhập tên tên danh mục');
+                return;
+            } else if (shortName.length == 0) {
+                alert('Vui lòng nhập mô tả ngắn');
+                return;
+            } else if (categoryOrder.length == 0) {
+                alert('Vui lòng thứ tự sắp xếp');
+                return;
+            }
+
+
+
+            // Kiểm tra giá trị nhập vào có phải là NAN or là số âm hay không?
+            if (categoryOrder < 0) {
+                alert('Dữ liệu cấp nhập vào không được âm!');
+                return;
+            }
+
+
+            // Kiểm tra không phải là số
+            if (isNaN(categoryOrder)) {
+                alert('Dữ liệu cấp nhập vào phải là số!');
+                return;
+            }
+
+            let idCategory = $('#idCategory').val().trim();
+
+            if (idCategory.length == 0) {
+                // Dùng ajax để thêm mới
+                $.ajax({
+                    url: '/Admin/AdminCategory/Create',
+                    type: 'post',
+                    data: {
+                        categoryName: categoryName,
+                        shortName: shortName,
+                        categoryOrder: categoryOrder,
+
+                        description: description,
+                        isActive: isActive,
+                        homeFlag: homeFlag
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+
+                            // Load lại ds
+                            LoadDsCategory();
+
+                            // Làm trắng các input
+                            let categoryName = $('#categoryName').val('');
+                            let shortName = $('#shortName').val('');
+                            let categoryOrder = $('#categoryOrder').val('');
+                            let description = $('#description').val('');
+                            let isActive = $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+                            let homeFlag = $('#homeFlag').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+
+
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+            else {
+                // Cập nhật danh mục đã tồn tại
+                $.ajax({
+                    url: '/Admin/AdminCategory/Edit',
+                    type: 'post',
+                    data: {
+                        id: idCategory,
+                        categoryName: categoryName,
+                        shortName: shortName,
+                        categoryOrder: categoryOrder,
+                        description: description,
+                        isActive: isActive,
+                        homeFlag: homeFlag
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+                            // đóng modal
+
+                            $('#largeModal').modal('hide');
+
+
+                            // Cập nhật thành công
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                           
+
+                            // Load lại danh sách lớp
+                            LoadDsCategory();
+
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+
+        });
+
+
+
+    </script>
+}

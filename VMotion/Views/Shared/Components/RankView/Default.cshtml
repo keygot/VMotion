@@ -1,0 +1,55 @@
+﻿@using VMotion.Utilities
+@*@model IEnumerable<dynamic>*@
+@model IList<TblMovie>
+
+
+@if (Model.Any(item => item.Rank == true))
+{
+    <section class="container-section">
+        <div class="container_title">Bảng xếp hạng phim</div>
+        <div id="rank" class="carousel carousel-rank">
+            <button class="carousel_btn-prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="carousel-wrap">
+                <div class="carousel-move row">
+                    @foreach (var rank2 in Model)
+                    {
+                        string url = Functions.TitleSlugGeneration("list", rank2.MovieName, rank2.MovieId);
+                        <a href="/@url" class="carousel_item col l-3 m-4 c-6">
+                            <div class="carousel_rank-img">
+                                <img src="@rank2.RankIMG" alt="@rank2.MovieName">
+                                <div class="carousel_rank-overlay">
+                                    <div class="btns-play-and-add">
+                                        <span class="btn-play">
+                                            <i class="fas fa-play"></i>
+                                        </span>
+                                        <span class="btn-add">
+                                            <i class="far fa-bookmark">
+                                                <i class="fas fa-plus"></i>
+                                            </i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel_rank-block">
+                                <img src="@rank2.RankNumber" alt="" class="carousel_rank-number">
+                                <div class="carousel_rank-content">
+                                    <p class="carousel_rank-title">@rank2.MovieName</p>
+                                    <p class="carousel_rank-update">24 tập</p>
+                                </div>
+                            </div>
+                        </a>
+
+                    }
+
+
+                </div>
+            </div>
+            <button class="carousel_btn-next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+}

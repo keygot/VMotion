@@ -1,0 +1,333 @@
+﻿@model VMotion.Models.TblMovie
+@{
+    ViewData["Title"] = "Thêm mới phim";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="AdminMovies" asp-action="Index">Danh sách phim</a></li>
+            <li class="breadcrumb-item active">Tạo mới phim</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+<hr />
+<div class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Tạo mới phim</h4>
+
+                    <div class="tab-content pt-2">
+                        <div class="tab-pane fade show active" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab">
+                            <!-- Vertical Form -->
+                            <form class="row g-3" asp-area="Admin" asp-controller="AdminMovies" asp-action="Create" method="post" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="col-6">
+                                    <label for="inputNanme4" class="form-label"><strong>Tên phim</strong></label>
+                                    <input type="text" class="form-control" asp-for="MovieName" id="title">
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="inputPassword4" class="form-label"><strong>Liên kết (Nếu có)</strong></label>
+                                    <input type="text" class="form-control" asp-for="Link" id="slideOrder">
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="inputEmail4" class="form-label"><strong>Danh mục</strong></label>
+                                    <select class="form-select" id="selectMovie" aria-label="Default select example" asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.CategoryList, "Value", "Text"))">
+                                    </select>
+                                </div>
+
+                                
+
+                                <div class="col-6">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <legend class="col-form-label col-sm-2 pt-0"><strong>Thể loại</strong></legend>
+
+                                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-heading3">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse3" aria-expanded="false" aria-controls="flush-collapse3" style="border: 1px solid #ced4da; border-radius: 0.375rem; padding: 10px 18px;">
+                                                            <strong>Chọn thể loại</strong>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapse3" class="accordion-collapse collapse" aria-labelledby="flush-heading3" data-bs-parent="#accordionFlushExample" style="">
+                                                        <ul class="list-group">
+                                                            @foreach (var genre in ViewBag.GenreList)
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <input class="form-check-input me-1" name="Genres" type="checkbox" id="genre-@genre.Value" value="@genre.Value" aria-label="...">
+                                                                    @genre.Text
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <legend class="col-form-label col-sm-2 pt-0"><strong>Đạo diễn</strong></legend>
+
+                                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-headingOne">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne" style="border: 1px solid #ced4da; border-radius: 0.375rem; padding: 10px 18px;">
+                                                            <strong>Chọn đạo diễn</strong>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                                                        <ul class="list-group">
+                                                            @foreach (var director in ViewBag.DirectorList)
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <input class="form-check-input me-1" name="Directors" type="checkbox" id="genre-@director.Value" value="@director.Value" aria-label="...">
+                                                                    @director.Text
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <legend class="col-form-label col-sm-2 pt-0"><strong>Diễn viên</strong></legend>
+
+                                            <div class="accordion accordion-flush" id="accordionFlushExampl">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-heading2">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse2" aria-expanded="false" aria-controls="flush-collapse2" style="border: 1px solid #ced4da; border-radius: 0.375rem; padding: 10px 18px;">
+                                                            <strong>Chọn diễn viên</strong>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapse2" class="accordion-collapse collapse" aria-labelledby="flush-heading2" data-bs-parent="#accordionFlushExampl" style="">
+                                                        <ul class="list-group">
+                                                            @foreach (var actor in ViewBag.ActorList)
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <input class="form-check-input me-1" name="Actors" type="checkbox" id="genre-@actor.Value" value="@actor.Value" aria-label="...">
+                                                                    @actor.Text
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-6">
+                                    <label for="Thumb" class="col-sm-6 col-form-label"><strong>Hình ảnh lớn</strong></label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-secondary" type="button" onclick="openDialog('ImgBGMax')">Chọn ảnh</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="ImgBGMax" asp-for="ImgMax" />
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="Thumb" class="col-sm-6 col-form-label"><strong>Hình ảnh nhỏ</strong></label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-secondary" type="button" onclick="openDialog('ImgBGMin')">Chọn ảnh</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="ImgBGMin" asp-for="ImgMin" />
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                @*<div class="col-6">
+                                    <label for="Thumb" class="col-sm-6 col-form-label"><strong>Hình ảnh nền</strong></label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-secondary" type="button" onclick="openDialog('ImgBGName')">Chọn ảnh</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="ImgBGName" asp-for="ImgBG" />
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>*@
+
+                                <div class="col-6">
+                                    <label for="Thumb" class="col-sm-6 col-form-label"><strong>Ảnh xếp hạng (Nếu có)</strong></label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-secondary" type="button" onclick="openDialog('RankImg')">Chọn ảnh</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="RankImg" asp-for="RankIMG" />
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="Thumb" class="col-sm-6 col-form-label"><strong>Ảnh số xếp hạng (Nếu có)</strong></label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-secondary" type="button" onclick="openDialog('RankNumber')">Chọn ảnh</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="RankNumber" asp-for="RankNumber" />
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+
+                               @* <div class="col-6">
+                                    <label for="Thumb" class="col-sm-6 col-form-label"><strong>Phim sắp ra mắt</strong></label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-secondary" type="button" onclick="openDialog('PosterIMG')">Chọn ảnh</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="PosterIMG" asp-for="PosterIMG" />
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                                <div class="col-6">
+                                    <label for="Thumb" class="col-sm-6 col-form-label"><strong>Video demo</strong></label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-secondary" type="button" onclick="openDialog('Trailer')">Chọn video</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="Trailer" asp-for="Trailer" />
+                                            <span class="text-danger"></span>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+
+
+                                 <div class="col-6">
+
+                                </div>
+
+
+                                <div class="col-6">
+                                    <label for="inputPassword4" class="form-label"><strong>Ngày phát hành</strong></label>
+                                    <input type="date" class="form-control" asp-for="ReleaseDate" id="slideOrder">
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="inputPassword4" class="form-label"><strong>Ngày ra mắt</strong></label>
+                                    <input type="date" class="form-control" asp-for="ComingsoonDate" id="slideOrder">
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="inputAddress" class="form-label"><strong>Mô tả về phim</strong></label>
+                                    <div class="col-sm-12">
+                                        <textarea id="Description" asp-for="Description"></textarea>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-6">
+                                    <label for="inputAddress" class="form-label"><strong>Kiểu hiển thị</strong></label>
+                                    <div class="col-sm-10">
+                                        <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                            <input asp-for="Popular" class="form-check-input" type="checkbox" checked id="isActive">
+                                            <label class="form-check-label">Phổ biến</label>
+                                        </div>
+                                        <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                            <input asp-for="Rank" class="form-check-input" type="checkbox" id="isActive">
+                                            <label class="form-check-label">Xếp hạng</label>
+                                        </div>
+                                        <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                            <input asp-for="Comingsoon" class="form-check-input" type="checkbox" id="isActive">
+                                            <label class="form-check-label">Phim sắp ra mắt</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="inputAddress" class="form-label"><strong>Trạng thái</strong></label>
+                                    <div class="col-sm-10">
+                                        <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                            <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActive">
+                                            <label class="form-check-label">Công khai</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="col-sm-12">
+                                        <input type="submit" value="Lưu lại" class="btn btn-primary" />
+                                    </div>
+
+                                </div>
+
+                            </form><!-- Vertical Form -->
+
+
+
+                        </div>
+
+
+                    </div><!-- End Bordered Tabs Justified -->
+                    <!-- General Form Elements -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        var summerNote = new VMotion.Areas.Admin.Models.SummerNote("#Description");
+
+    <partial name="_SummerNote" model="summerNote" />
+    }
+
+
+
+}

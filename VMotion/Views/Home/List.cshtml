@@ -1,0 +1,179 @@
+﻿@using VMotion.Utilities
+@model IList<ViewCategory>
+
+@*Hiển thị slide*@
+@await Component.InvokeAsync("SliderView");
+<div class="container">
+    <div class="grid">
+
+        
+        @foreach (var category in Model)
+        {
+            <section class="container-section">
+                <div class="container_title">@category.CategoryName</div>
+                <div id="" class="carousel carousel-main">
+                    <button class="carousel_btn-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="carousel-wrap swiper mySwiper">
+                        <div class="carousel-move swiper-wrapper row">
+                            @foreach (var movie in category.Movies)
+                            {
+                                string url = Functions.TitleSlugGeneration("list", movie.MovieName, movie.MovieId);
+
+                                <a href="/@url" class="swiper-slide carousel_item col l-2 m-3 c-4">
+                                    <div class="carousel_item-images">
+                                        <div class="carousel_img-min">
+                                            <img src="@movie.ImgMin" alt="">
+                                            <div class="carousel_img-min-overlay carousel_img-overlay">
+                                                <span> tập</span>
+                                            </div>
+                                        </div>
+                                        <div class="carousel_img-max">
+                                            <img src="@movie.ImgMax" alt="">
+                                            <div class="carousel_img-max-overlay carousel_img-overlay">
+                                                <span><span>Thể loại:</span>
+
+                                                   @* @foreach (var genre in movie.MovieGenres)
+                                                    {
+                                                        @if (genre.Genre != null)
+                                                        {
+                                                            @genre.Genre.GenreName
+                                                            @if (genre != movie.MovieGenres.Last())
+                                                            {
+                                                                @: ,
+                                                            }
+
+                                                        }
+                                                    }*@
+                                            
+                                                </span>
+                                                <div class="btns-play-and-add">
+                                                    <span class="btn-play">
+                                                        <i class="fas fa-play"></i>
+                                                    </span>
+                                                    <span class="btn-add">
+                                                        <i class="far fa-bookmark">
+                                                            <i class="fas fa-plus"></i>
+                                                        </i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel_item-title">
+                                        <p>@movie.MovieName</p>
+                                    </div>
+                                </a>
+                            }
+                           
+                        </div>
+
+                    </div>
+                    <button class="carousel_btn-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+        }
+
+
+        
+
+        <section class="container-section">
+            <div class="container_banner"></div>
+        </section>
+
+
+
+
+    </div>
+</div>
+@section Scripts {
+    <script>
+        // ---- Slider  ---- //
+
+        var slideIndex = 0;
+        showSlides();
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides2(slideIndex += n);
+        }
+
+        function showSlides2(n) {
+            var i;
+            var slides = document.getElementsByClassName("slider-wrap");
+
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slides[slideIndex - 1].style.display = "block";
+        }
+
+        function showSlides() {
+            var i;
+            var slides = document.getElementsByClassName("slider-wrap");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 5000);
+        }
+    </script>
+
+    <script>
+        function sliderStyle2(options) {
+            const carouselMove = $(options.carouselMoveSelector)
+            const carouselWidth = $(options.carouselSelector).offsetWidth
+            const prevBtn = $(options.prevBtnSelector)
+            const nextBtn = $(options.nextBtnSelector)
+            prevBtn.style.display = 'none'
+
+
+            const carouselItems = $$(options.carouselItemsSelector)
+            const carouselMoveQuantity = Math.round(carouselItems.length / (carouselMove.getBoundingClientRect().width / carouselItems[0].getBoundingClientRect().width))
+            var l = 0
+            nextBtn.onclick = () => {
+                prevBtn.style.display = 'block'
+                l++;
+                if (l < carouselMoveQuantity) {
+                    carouselMove.style.transform = `translateX(calc(0px - ${carouselWidth}px * ${l}))`
+                    if (l == carouselMoveQuantity - 1) {
+                        nextBtn.style.display = 'none'
+                    }
+                } else {
+                    l = carouselMoveQuantity - 1
+                    nextBtn.style.display = 'none'
+                }
+            }
+
+            prevBtn.onclick = () => {
+                nextBtn.style.display = 'block'
+                l--;
+                if (l >= 0) {
+                    carouselMove.style.transform = `translateX(calc(0px - ${carouselWidth}px * ${l}))`
+                    if (l == 0) {
+                        prevBtn.style.display = 'none'
+                    }
+                } else {
+                    l = 0
+                    prevBtn.style.display = 'none'
+                }
+            }
+        }
+
+        sliderStyle2({
+            carouselSelector: '#rank',
+            carouselMoveSelector: '#rank .carousel-move',
+            prevBtnSelector: '#rank .carousel_btn-prev',
+            nextBtnSelector: '#rank .carousel_btn-next',
+            carouselItemsSelector: '#rank .carousel_item'
+        })
+    </script>
+}

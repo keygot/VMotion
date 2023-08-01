@@ -1,0 +1,754 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<VMotion.Models.TblActor>
+
+@{
+
+    ViewData["Title"] = "Danh sách diễn viên";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div id="toastsContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1999;"></div>
+
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Danh sách diễn viên : Trang @ViewBag.CurrentPage</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body" style="padding: 50px ;">
+                    <div class="row m-b-30" style="align-items: center; margin-bottom: 30px !important;">
+                        <div class="col-md-8">
+                            <div class="row" style="display: flex; align-items: center;">
+
+
+                                <div class="col-md-6 mb-3 header" style="box-shadow: none !important; display: flex; justify-content: center; align-items: center; z-index: 0 !important;">
+
+
+                                    <div class="search-bar" style="padding: 0 8px !important;">
+                                        <form class="search-form d-flex align-items-center" method="POST" action="#">
+                                            <input type="text" id="keyword" name="keyword" placeholder="Tìm kiếm" title="Enter search keyword">
+                                            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option disabled selected>Chọn trạng thái</option>
+                                        <option value="All">Chọn tất cả</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" style="text-align: right !important;">
+
+
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" id="btnAdd" data-bs-target="#largeModal"><i class="bi bi-plus"></i> Thêm mới</button>
+
+                            @*THÊM MỚI Diễn viên *@
+                            <div class="modal fade" id="largeModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background: #0d6efd;">
+                                            <h5 class="modal-title"><strong style="color: #ffff;" id="modal-title"></strong></h5>
+                                            <button type="button" style="color: #ffff;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" style="text-align: left;">
+                                            <div class="col-lg-12">
+
+
+                                                <!-- Vertical Form -->
+                                                <form class="row g-3">
+                                                    <input hidden id="idActor" type="text" value="" />
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Họ và tên</strong></label>
+                                                        <input type="text" class="form-control" id="fullName">
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Số điện thoại</strong></label>
+                                                        <input type="text" class="form-control" id="phone">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Email</strong></label>
+                                                        <input type="email" class="form-control" id="email">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Ngày sinh</strong></label>
+                                                        <input type="date" class="form-control" id="birthDate">
+                                                    </div>
+
+
+
+                                                    <div class="col-6">
+                                                        <label for="inputEmail4" class="form-label"><strong>Quốc gia</strong></label>
+                                                        <select class="form-select" id="selectCountry" aria-label="Default select example">
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Địa chỉ chi tiết</strong></label>
+                                                        <input type="text" class="form-control" id="address">
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label for="Thumb" class="col-sm-2 col-form-label"><strong>Ảnh đại diện</strong></label>
+                                                        <div class="col-sm-12">
+                                                            <div class="input-group mb-3">
+                                                                <div class="input-group-prepend">
+                                                                    <button class="btn btn-secondary" type="button" onclick="openDialog('avatar')">Chọn ảnh</button>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="avatar" />
+                                                                <span class="text-danger"></span>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <fieldset class="row mb-3">
+                                                            <label for="" class="col-sm-12 col-form-label"><strong>Giới tính</strong></label>
+                                                            <div class="col-sm-12" style="display: flex; justify-content: space-between; align-items: center;">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gtNam" value="option1" checked="">
+                                                                    <label class="form-check-label" for="gridRadios1">
+                                                                        Nam
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gtNu" value="option2">
+                                                                    <label class="form-check-label" for="gridRadios2">
+                                                                        Nữ
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check disabled">
+                                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gtKhac" value="option3" disabled="">
+                                                                    <label class="form-check-label" for="gridRadios3">
+                                                                        Khác
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+
+                                                    <div class="col-12">
+                                                        <label for="inputAddress" class="form-label"><strong>Trạng thái</strong></label>
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                                                <input class="form-check-input" type="checkbox" id="isActive">
+                                                                <label for="IsActive" class="form-check-label">Công khai</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </form><!-- Vertical Form -->
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" id="btnAddActor">Lưu lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Large Modal-->
+
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover e-commerce-table" style="margin-bottom: 50px !important;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 1rem !important;">ID</th>
+                                    <th style="padding: 1rem !important;">Họ và tên</th>
+                                    <th style="padding: 1rem !important;">Số điện thoại</th>
+                                    <th style="padding: 1rem !important;">Email</th>
+                                    <th style="padding: 1rem !important;">Ngày sinh</th>
+                                    <th style="padding: 1rem !important;">Trạng thái</th>
+                                    <th style="padding: 1rem !important;">Chức năng</th>
+
+
+
+                                </tr>
+                            </thead>
+
+                            @*// Danh sách actor*@
+                            <tbody id="dsActor" style="vertical-align:-webkit-baseline-middle !important;">
+
+                                @*Hàm LoadDsActor() sẽ hiển thị ở đây*@
+
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" id="phanTrang">
+                            </ul>
+                        </nav>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+@section Scripts {
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+
+        //
+
+        var trang = 1;
+
+        $(document).ready(function () {
+
+            // Load danh sách menu lên table
+            LoadDsActor(trang);
+
+
+            // Load danh sách quốc gia và thẻ select
+            LoadDsCountry();
+
+
+        });
+
+        // sự kiện click li phân trang
+        $('#phanTrang').on("click", "li", function (e) {
+            e.preventDefault(); // Bỏ mặc định link href
+            trang = $(this).text();
+            LoadDsActor(trang);
+
+
+        });
+
+
+        // Phần này để tìm kiếm Danh sách actor
+        $("#keyword").keyup(function () {
+            var strkeyword = $('#keyword').val();
+            $.ajax({
+                url: '/Admin/Search/FindActors/',
+                datatype: "json",
+                type: "POST",
+                data: { keyword: strkeyword },
+                async: true,
+                success: function (results) {
+                    $("#dsActor").html("");
+                    $("#dsActor").html(results);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            });
+        });
+
+
+        // Load danh sách Menu
+        function LoadDsActor(trang) {
+
+            $.ajax({
+                url: '/Admin/AdminActors/DsActors',
+                type: 'GET',
+                data: {
+                    trang: trang,
+
+                },
+
+                success: function (data) {
+                    //console.log(data);
+
+                    if (data.code == 200) {
+
+                        $('#dsActor').empty();
+
+                        $.each(data.dsActors, function (key, value) {
+                            let tr = '<tr id="' + value.actorId + '">'
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.actorId + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.fullName + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.phone + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.email + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.birthDate + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.isActive + '</td>';
+
+                            tr += '<td style="min-width: 150px !important;">';
+                            tr += '<a class="btn btn-primary btn-sm" name="xem" data-bs-toggle="modal" data-bs-target="#largeModal" title ="xem"><i class="ri-eye-line" > </i></a >';
+                            tr += '<a class="btn btn-success btn-sm" name="edit" data-bs-toggle="modal" data-bs-target="#largeModal" title ="sửa" style="margin: 0 5px !important;"><i class="ri-edit-2-line"></i></a >';
+                            tr += '<a class="btn btn-danger btn-sm" name="delete" title = "xóa"><i class="bi bi-trash"></i></a >';
+
+                            tr += '</td>';
+
+                            tr += '</tr>';
+
+                            $('#dsActor').append(tr);
+                        });
+
+                        // Phân trang
+                        if (data.soTrang > 1) {
+                            $('#phanTrang').empty();
+
+                            for (i = 1; i <= data.soTrang; i++) {
+                                let li = '<li class="page-item" name="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+
+                                $('#phanTrang').append(li);
+                            }
+
+                            let li = $('#phanTrang').find('li[name="' + trang + '"]');
+                            $(li).addClass('active');
+
+
+                            //if(trang == 1) {
+                            //    $('#phanTrang li:first').addClass('active');
+                            //}
+
+                        }
+                    }
+                }
+            });
+        }
+
+        // XÓA Diễn viên
+        $(document).on('click', "a[name='delete']", function () {
+            let actorId = $(this).closest('tr').attr('id');
+
+            if (confirm("Bạn có thực sự muốn xóa trường này không?")) {
+                // dùng ajax để xóa lớp được chọn
+                $.ajax({
+                    url: '/Admin/AdminActors/Delete',
+                    type: 'POST',
+                    data: {
+                        id: actorId,
+
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                             // Cập nhật thành công
+
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            // Load lại danh sách
+                            LoadDsActor();
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                    }
+                })
+            }
+        });
+
+        // XEM CHI TIẾT MENU
+        $(document).on('click', "a[name='xem']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Thông tin chi tiết');
+            let actorId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminActors/Details',
+                type: 'GET',
+                data: {
+                    id: actorId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+                        $('#selectCountry').val(data.tblActors.countryId);
+                        $('#fullName').val(data.tblActors.fullName);
+                        $('#phone').val(data.tblActors.phone);
+                        $('#email').val(data.tblActors.email);
+                        $('#birthDate').val(data.tblActors.birthDate);
+                        $('#avatar').val(data.tblActors.avatar);
+                        $('#address').val(data.tblActors.address);
+
+                        if ((data.tblActors.isActive) == true) {
+                            $('#isActive').prop('checked', true);
+                        } else {
+                            $('#isActive').prop('checked', false);
+
+                        }
+
+                        if ((data.tblActors.gender) == 1) {
+                            $('#gtNam').prop('checked', true); // Kiểm tra ô đánh dấu có được chọn hay không
+                        } else if ((data.tblActors.gender) == 0) {
+                            $('#gtNu').prop('checked', true); // Kiểm tra ô đánh dấu có được chọn hay không
+                        }
+                        else {
+                            $('#gtKhac').prop('checked', true); // Kiểm tra ô đánh dấu có được chọn hay không
+                        }
+
+
+
+
+
+                        // Không cho chỉnh sửa dữ liệu
+                        $('#selectCountry').prop('disabled', true);
+                        $('#fullName').prop('disabled', true);
+                        $('#phone').prop('disabled', true);
+                        $('#email').prop('disabled', true);
+                        $('#birthDate').prop('disabled', true);
+                        $('#address').prop('disabled', true);
+                        $('#avatar').prop('disabled', true);
+                        $('#isActive').prop('readonly', true);
+
+                        // Gán giá trị cho text hidden có giá trị là idActor = actorId
+                        $('#idActor').val(actorId);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddActor').hide();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                    }
+                }
+            })
+        });
+
+
+        //// Chỉnh sửa Diễn viên
+        $(document).on('click', "a[name='edit']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Chỉnh sửa diễn viên');
+            let actorId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminActors/Details',
+                type: 'GET',
+                data: {
+                    id: actorId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+                        $('#selectCountry').val(data.tblActors.countryId);
+                        $('#fullName').val(data.tblActors.fullName);
+                        $('#phone').val(data.tblActors.phone);
+                        $('#email').val(data.tblActors.email);
+                        $('#birthDate').val(data.tblActors.birthDate);
+                        $('#avatar').val(data.tblActors.avatar);
+                        $('#address').val(data.tblActors.address);
+
+                        if ((data.tblActors.isActive) == true) {
+                            $('#isActive').prop('checked', true);
+                        } else {
+                            $('#isActive').prop('checked', false);
+
+                        }
+
+                        if ((data.tblActors.gender) == 1) {
+                            $('#gtNam').prop('checked', true); // Kiểm tra ô đánh dấu có được chọn hay không
+                        } else if ((data.tblActors.gender) == 0) {
+                            $('#gtNu').prop('checked', true); // Kiểm tra ô đánh dấu có được chọn hay không
+                        }
+                        else {
+                            $('#gtKhac').prop('checked', true); // Kiểm tra ô đánh dấu có được chọn hay không
+                        }
+
+                        // Gán giá trị cho text hidden có giá trị là idActor = actorId
+                        $('#idActor').val(actorId);
+
+
+                        // Không cho chỉnh sửa dữ liệu
+                        $('#selectCountry').prop('disabled', false);
+                        $('#fullName').prop('disabled', false);
+                        $('#phone').prop('disabled', false);
+                        $('#email').prop('disabled', false);
+                        $('#birthDate').prop('disabled', false);
+                        $('#address').prop('disabled', false);
+                        $('#avatar').prop('disabled', false);
+                        $('#isActive').prop('readonly', false);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddActor').show();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            })
+        });
+
+        $('#btnAdd').click(function () {
+            // gán title cho modal
+            $('#modal-title').text('Thêm mới');
+
+
+            // Làm trắng các input
+            //$('#selectCountry').val('');
+            $('#fullName').val('');
+            $('#phone').val('');
+            $('#email').val('');
+            $('#birthDate').val('');
+            $('#avatar').val('');
+            $('#address').val('');
+            $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+            $('#gtNam').prop('checked', true); // Kiểm tra ô đánh dấu có được chọn hay không
+
+            $('#idActor').val('');
+
+
+
+            //
+            // Cho chỉnh sửa dữ liệu
+            $('#selectCountry').prop('disabled', false);
+            $('#fullName').prop('disabled', false);
+            $('#phone').prop('disabled', false);
+            $('#email').prop('disabled', false);
+            $('#birthDate').prop('disabled', false);
+            $('#address').prop('disabled', false);
+            $('#avatar').prop('disabled', false);
+            $('#isActive').prop('readonly', false);
+
+            $('#btnAddActor').show();
+
+        })
+
+        // THÊM MỚI Diễn viên
+        // Sự kiện click của button xác nhận thêm mới diễn viên
+        $('#btnAddActor').click(function () {
+            // Lấy dữ diệu người dùng nhập vào
+            let countryId = $('#selectCountry').val().trim();
+            let fullName = $('#fullName').val().trim();
+            let phone = $('#phone').val().trim();
+            let email = $('#email').val().trim();
+            let birthDate = $('#birthDate').val().trim();
+            let avatar = $('#avatar').val().trim();
+            let address = $('#address').val().trim();
+
+            let isActive = $('#isActive').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+
+
+            let gioitinh = 0;
+            if ($('#gtNam').prop('checked')) {
+                gioitinh = 1;
+            } else if ($('#gtNu').prop('checked')) {
+                gioitinh = 0;
+            } else {
+                gioitinh = 2;
+            }
+
+
+
+
+            // Các ràng buộc dữ liệu
+
+            // Kiểm tra rỗng
+            if (fullName.length == 0) {
+                alert('Vui lòng nhập họ và tên');
+                return;
+            }
+
+
+            // Kiểm tra giá trị nhập vào có phải là NAN or là số âm hay không?
+            if (phone < 0) {
+                alert('Dữ liệu cấp nhập vào không được âm!');
+                return;
+            }
+
+
+
+            // Kiểm tra không phải là số
+            if (isNaN(phone)) {
+                alert('Dữ liệu cấp nhập vào phải là số!');
+                return;
+            }
+
+
+
+            let idActor = $('#idActor').val().trim();
+
+            if (idActor.length == 0) {
+                // Dùng ajax để thêm mới
+                $.ajax({
+                    url: '/Admin/AdminActors/Create',
+                    type: 'post',
+                    data: {
+                        fullName: fullName,
+                        countryId: countryId,
+                        phone: phone,
+                        email: email,
+                        avatar: avatar,
+                        address: address,
+                        birthDate: birthDate,
+                        gender: gioitinh,
+                        isActive: isActive
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+                            //alert(data.msg);
+
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            // load lại danh sách 
+                            LoadDsActor();
+
+                            let countryId = $('#selectCountry').val('');
+                            let fullName = $('#fullName').val('');
+                            let phone = $('#phone').val('');
+                            let email = $('#email').val('');
+                            let birthDate = $('#birthDate').val('');
+                            let avatar = $('#avatar').val('');
+                            let address = $('#address').val('');
+
+                            let isActive = $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+            else {
+                // Cập nhật diễn viên đã tồn tại
+                $.ajax({
+                    url: '/Admin/AdminActors/Edit',
+                    type: 'post',
+                    data: {
+                        id: idActor,
+                        fullName: fullName,
+                        countryId: countryId,
+                        phone: phone,
+                        email: email,
+                        avatar: avatar,
+                        address: address,
+                        birthDate: birthDate,
+                        gender: gioitinh,
+                        isActive: isActive
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+
+                            // đóng modal
+
+                            $('#largeModal').modal('hide');
+                           
+
+                            // Cập nhật thành công
+
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            
+
+                            // Load lại danh sách lớp
+                            LoadDsActor();
+
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+
+        });
+        // Lấy danh sách quốc gia dùng cho thẻ select có id là selectCountry
+        function LoadDsCountry() {
+            $.ajax({
+                url: '/Admin/AdminCountries/AllCountry',
+                type: 'GET',
+                success: function (data) {
+                    $('#selectCountry').empty(); // loại bỏ rỗng
+                    if (data.code == 200) {
+                        $.each(data.allCountry, function (k, v) {
+                            let opt = '<option value="' + v.countryId + '" selected= "">' + v.countryName + '</option>';
+                            $('#selectCountry').append(opt);
+
+                        });
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
+    </script>
+
+
+    @{
+        var summerNote = new VMotion.Areas.Admin.Models.SummerNote("#Description");
+
+        <partial name="_SummerNote" model="summerNote" />
+    }
+    }

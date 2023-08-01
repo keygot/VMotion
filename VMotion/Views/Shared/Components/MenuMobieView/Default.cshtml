@@ -1,0 +1,81 @@
+﻿@using VMotion.Models;
+@using VMotion.Utilities;
+
+@model IList<TblMenu>
+
+<div class="header_navbar">
+    <div class="navbar_btn">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="navbar_overlay"></div>
+
+    <div class="navbar_block">
+        <span class="navbar_close">
+            <i class="ti-close"></i>
+        </span>
+        <div class="navbar_user">
+            <i class="far fa-user"></i>
+            <span>Đăng nhập / Đăng ký</span>
+        </div>
+
+
+        <ul class="navbar_menu">
+            @foreach(var menu in Model.Where(m => m.Levels == 1).OrderBy(m => m.Position)) {
+                string url = Functions.TitleSlugGeneration("list", menu.MenuName, menu.MenuId);
+
+                if(!string.IsNullOrEmpty(menu.Link)) {
+                    url = menu.Link;
+                }
+
+                var IDC1 = menu.MenuId;
+
+                var dsMenuC2 = Model.Where(m => m.ParentId == IDC1).OrderBy(m => m.MenuOrder).ToList();
+
+                @if(dsMenuC2.Count == 0) {
+                    if(menu.MenuOrder == 1) {
+                        <li class="navbar_menu-item active">
+                            <a href="/@url" class="navbar_menu-link">
+                                @menu.MenuName
+                            </a>
+                        </li>
+                    }else {
+                        <li class="navbar_menu-item">
+                            <a href="/@url" class="navbar_menu-link">
+                                @menu.MenuName
+                            </a>
+                        </li>
+                    }
+                }else {
+                    <li class="navbar_menu-item has-submenu">
+                        <h5 class="navbar_menu-item-title">
+                             @menu.MenuName
+                            <i class="down-icon fas fa-chevron-down"></i>
+                            <i class="up-icon fas fa-chevron-up"></i>
+                        </h5>
+                        <div class="navbar_sub-menu">
+                            @foreach(var menu2 in dsMenuC2) {
+                                string url2 = Functions.TitleSlugGeneration("list", menu2.MenuName, menu2.MenuId);
+
+                                if (!string.IsNullOrEmpty(menu2.Link))
+                                {
+                                    url2 = menu2.Link;
+                                }
+
+                                <a href="/@url2">@menu2.MenuName</a>
+                            }
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+        <div class="navbar_downapp">
+            <a href="#" class="navbar_downapp-link">
+                <img src="~/assets/img/Apple.png" alt="">
+            </a>
+            <a href="#" class="navbar_downapp-link">
+                <img src="~/assets/img/Google.png" alt="">
+            </a>
+        </div>
+    </div>
+</div>

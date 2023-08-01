@@ -1,0 +1,78 @@
+﻿@using VMotion.Utilities
+@model IList<ViewCategory>
+
+
+
+
+@foreach (var category in Model)
+{
+    <section class="container-section">
+        <div class="container_title">@category.CategoryName</div>
+        <div id="" class="carousel carousel-main">
+            <button class="carousel_btn-prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="carousel-wrap swiper mySwiper">
+                <div class="carousel-move swiper-wrapper row">
+                    @foreach (var movie in category.Movies)
+                    {
+                        string url = Functions.TitleSlugGeneration("list", movie.MovieName, movie.MovieId);
+
+                        <a href="/@url" class="swiper-slide carousel_item col l-2 m-3 c-4">
+                            <div class="carousel_item-images">
+                                <div class="carousel_img-min">
+                                    <img src="@movie.ImgMin" alt="">
+                                    <div class="carousel_img-min-overlay carousel_img-overlay">
+                                        <span> tập</span>
+                                    </div>
+                                </div>
+                                <div class="carousel_img-max">
+                                    <img src="@movie.ImgMax" alt="">
+                                    <div class="carousel_img-max-overlay carousel_img-overlay">
+                                        <span><span>Thể loại:
+
+
+                                                @foreach (var genre in movie.MovieGenres)
+                                                {
+                                                    @if (genre.Genre != null)
+                                                    {
+                                                        @genre.Genre.GenreName
+                                                        @if (genre != movie.MovieGenres.Last())
+                                                        {
+                                                            @: ,
+                                                        }
+
+                                                    }
+                                                }
+                                        </span> </span>
+                                                
+                                        <div class="btns-play-and-add">
+                                            <span class="btn-play">
+                                                <i class="fas fa-play"></i>
+                                            </span>
+                                            <span class="btn-add">
+                                                <i class="far fa-bookmark">
+                                                    <i class="fas fa-plus"></i>
+                                                </i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel_item-title">
+                                <p>@movie.MovieName</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+            <button class="carousel_btn-next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+}
+
+
+
+

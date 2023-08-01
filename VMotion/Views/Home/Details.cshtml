@@ -1,0 +1,438 @@
+﻿@using VMotion.Utilities
+@model VMotion.Models.ViewMoive
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/css/video.css">
+
+}
+
+    <div class="container container-play">
+        <div class="play-container">
+            <div class="play_area">
+                <div class="play_area-left">
+                @if (Model.Trailer != null)
+                {
+                    @*<video src="@Model.Trailer" controls muted></video>*@
+                    <div class="video-container paused" data-volume-level="high">
+                        <img class="thumbnail-img">
+                        <div class="video-controls-container">
+                            <div class="timeline-container">
+                                <div class="timeline">
+                                    <img class="preview-img">
+                                    <div class="thumb-indicator"></div>
+                                </div>
+                            </div>
+                            <div class="controls">
+                                <button class="play-pause-btn">
+                                    <svg class="play-icon" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                                    </svg>
+                                    <svg class="pause-icon" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M14,19H18V5H14M6,19H10V5H6V19Z" />
+                                    </svg>
+                                </button>
+                                <div class="volume-container">
+                                    <button class="mute-btn">
+                                        <svg class="volume-high-icon" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+                                        </svg>
+                                        <svg class="volume-low-icon" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M5,9V15H9L14,20V4L9,9M18.5,12C18.5,10.23 17.5,8.71 16,7.97V16C17.5,15.29 18.5,13.76 18.5,12Z" />
+                                        </svg>
+                                        <svg class="volume-muted-icon" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z" />
+                                        </svg>
+                                    </button>
+                                    <input class="volume-slider" type="range" min="0" max="1" step="any" value="1">
+                                </div>
+                                <div class="duration-container">
+                                    <div class="current-time">0:00</div>
+                                    /
+                                    <div class="total-time"></div>
+                                </div>
+                                <button class="captions-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M18,11H16.5V10.5H14.5V13.5H16.5V13H18V14A1,1 0 0,1 17,15H14A1,1 0 0,1 13,14V10A1,1 0 0,1 14,9H17A1,1 0 0,1 18,10M11,11H9.5V10.5H7.5V13.5H9.5V13H11V14A1,1 0 0,1 10,15H7A1,1 0 0,1 6,14V10A1,1 0 0,1 7,9H10A1,1 0 0,1 11,10M19,4H5C3.89,4 3,4.89 3,6V18A2,2 0 0,0 5,20H19A2,2 0 0,0 21,18V6C21,4.89 20.1,4 19,4Z" />
+                                    </svg>
+                                </button>
+                                <button class="speed-btn wide-btn">
+                                    1x
+                                </button>
+                                <button class="mini-player-btn">
+                                    <svg viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10-7h9v6h-9z" />
+                                    </svg>
+                                </button>
+                                <button class="theater-btn">
+                                    <svg class="tall" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M19 6H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H5V8h14v8z" />
+                                    </svg>
+                                    <svg class="wide" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M19 7H5c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm0 8H5V9h14v6z" />
+                                    </svg>
+                                </button>
+                                <button class="full-screen-btn">
+                                    <svg class="open" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                                    </svg>
+                                    <svg class="close" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <video id="videoPlayer" src="@Model.Trailer">
+                            <track kind="captions" srclang="en" src="assets/subtitles.vtt">
+                        </video>
+                    </div>
+                }
+                else
+                {
+                    <section class="loading">
+                        <div class="loader">
+                            <div class="dot" style="--i:0"></div>
+                            <div class="dot" style="--i:1"></div>
+                            <div class="dot" style="--i:2"></div>
+                            <div class="dot" style="--i:3"></div>
+                            <div class="dot" style="--i:4"></div>
+                            <div class="dot" style="--i:5"></div>
+                            <div class="dot" style="--i:6"></div>
+                            <div class="dot" style="--i:7"></div>
+                            <div class="dot" style="--i:0"></div>
+                            <div class="dot" style="--i:9"></div>
+                        </div>
+                        <h2>Loading...</h2>
+
+                        <div class="loader">
+                            <div class="dot" style="--i:0"></div>
+                            <div class="dot" style="--i:1"></div>
+                            <div class="dot" style="--i:2"></div>
+                            <div class="dot" style="--i:3"></div>
+                            <div class="dot" style="--i:4"></div>
+                            <div class="dot" style="--i:5"></div>
+                            <div class="dot" style="--i:6"></div>
+                            <div class="dot" style="--i:7"></div>
+                            <div class="dot" style="--i:0"></div>
+                            <div class="dot" style="--i:9"></div>
+                        </div>
+                    </section>
+                }
+            </div>
+            <div class="play_area-right">
+                <div class="play_area-title">@Model.MovieName</div>
+                <div class="play_area-tabs">
+                    <div class="play_area-tab-item active">
+                        <span class="play-icon"></span>
+                        Chọn tập
+                    </div>
+                    <div class="play_area-tab-item">Nội dung đặc sắc</div>
+                </div>
+                <div class="play_area-tab-content">
+                    <p class="play_area-tab-desc">Chọn tập 1-32</p>
+                    <div class="play_area-tab-block">
+                        <ul class="play_area-ep-list" id="episode-list">
+                            @*<li class="play_area-ep-item active"><a href="#" class="play_area-ep-link">1</a></li>
+                            <li class="play_area-ep-item"><a href="#" class="play_area-ep-link">2</a></li>*@
+                            @foreach (var item in Model.MovieEpisodes.OrderBy(x => x.EpisodeNumber))
+                            {
+                                @*string url = Functions.TitleSlugGeneration("tap", Model.MovieName, item.EpisodeId);*@
+                                @if (item.EpisodeNumber != null)
+                                {
+                                    <li class="play_area-ep-item" data-video="@item.Video"><a href="#" class="play_area-ep-link">@item.EpisodeNumber</a></li>
+                                }
+
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="play_content">
+            <div class="play_content-left">
+                <div class="play_content-info">
+                    <h3 class="content-info_title" id="episode-title">@Model.MovieName</h3>
+                    <div class="content-info_update">
+                        <span>C13</span>
+                        <span>
+                            @if (Model.ReleaseDate != null)
+                            {
+                                @Model.ReleaseDate.Value.ToString("dd/MM/yyyy")
+                            }
+                        </span>
+                        <span>Cập nhật @Model.MovieEpisodes.Count()/@Model.MovieEpisodes.Count() tập</span>
+                    </div>
+                    <div class="content-info_rate">
+                        <div class="content-info_rate-point">
+                            <span>9.3</span>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="content-info_rate-number-person" style="color: #e6e6e6;">@Model.SView Lượt xem</div>
+                        <div class="content-info_rate-own">Tôi muốn đánh giá</div>
+                    </div>
+                    <div class="content-info_main">
+                        <p class="content-info_category">
+                            <span>Thể loại:</span>
+                            @foreach (var item in Model.MovieGenres)
+                            {
+                                @if (item.Genre != null)
+                                {
+                                    @item.Genre.GenreName
+                                    @if (item != Model.MovieGenres.Last())
+                                    {
+                                        @: ,
+                                    }
+                                }
+                            }
+
+                        </p>
+                        <p class="content-info_country">
+                            <span>Khu vực:</span>
+                            Trung quốc đại lục
+                        </p>
+                        <p class="content-info_voiceover">
+                            <span>Lồng tiếng:</span>
+                            Phổ thông
+                        </p>
+                        <p class="content-info_decs">
+                            <span>Miêu tả:</span>
+                            @Html.Raw(Model.Description)
+                        </p>
+                    </div>
+
+
+
+                    <div class="content-info_list row">
+
+                        @foreach (var director in Model.MovieDirectors.Where(m => m.Director.IsActive == true))
+                        {
+                            @if (director.Director != null)
+                            {
+                                <a href="#" class="content-info_item col l-2 m-2 c-4">
+                                    <div class="content-info_img">
+                                        <img src="@director.Director.Avatar" alt="">
+                                    </div>
+                                    <div class="content-info_name">@director.Director.FullName</div>
+                                    <div class="content-info_type">Đạo diễn</div>
+                                </a>
+                            }
+                        }
+
+                        @foreach (var actor in Model.MovieActors.Where(m => m.Actor.IsActive == true))
+                        {
+                            @if (actor.Actor != null)
+                            {
+                                <a href="#" class="content-info_item col l-2 m-2 c-4">
+                                    <div class="content-info_img">
+                                        <img src="@actor.Actor.Avatar" alt="">
+                                    </div>
+                                    <div class="content-info_name">@actor.Actor.FullName</div>
+                                    <div class="content-info_type">Diễn viên chính</div>
+                                </a>
+                            }
+                        }
+
+                    </div>
+
+                    <div class="content-info_buttons">
+                        <div class="content-info_btn">
+                            <i class="fas fa-arrow-down"></i>
+                            Tải APP
+                        </div>
+                        <div class="content-info_btn">
+                            <i class="fas fa-bookmark"></i>
+                            Thêm vào lưu trữ
+                        </div>
+                        <div class="content-info_btn">
+                            <i class="fas fa-share-square"></i>
+                            Chia sẻ
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid tab-content">
+                    @await  Component.InvokeAsync("PopularView")
+                </div>
+            </div>
+
+            <div class="play_content-right">
+                <div class="play_content-rank">
+                    <h3 class="play_content-rank-title">Bảng Xếp Hạng</h3>
+                    <ul class="play_content-rank-list">
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>1</span>
+                                    Bí mật nơi góc tối
+                                </p>
+                                <img src="./assets/img/rank-img1.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>2</span>
+                                    One Piece (Đảo Hải Tặc)
+                                </p>
+                                <img src="./assets/img/rank-img2.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>3</span>
+                                    Hạ Tiên Sinh Lưu Luyến Không Quên (Nỗi Vương Vấn Của Hạ Tiên Sinh)
+                                </p>
+                                <img src="./assets/img/rank-img3.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>4</span>
+                                    Bạn Gái Lầu Dưới Xin Hãy Ký Nhận
+                                </p>
+                                <img src="./assets/img/rank-img4.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>5</span>
+                                    【Thuyết minh】Một Đời Một Kiếp (Nhất Sinh Nhất Thế)'
+                                </p>
+                                <img src="./assets/img/rank-img5.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>6</span>
+                                    Trường An như cố
+                                </p>
+                                <img src="./assets/img/rank-img6.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>7</span>
+                                    Bác sĩ xứ lạ
+                                </p>
+                                <img src="./assets/img/rank-img7.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>8</span>
+                                    Nửa Là Đường Mật Nửa Là Đau Thương
+                                </p>
+                                <img src="./assets/img/rank-img8.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>9</span>
+                                    Đối tác đáng ngờ
+                                </p>
+                                <img src="./assets/img/rank-img9.jpg" alt="">
+                            </a>
+                        </li>
+                        <li class="play_content-rank-item">
+                            <a href="" class="play_content-rank-link">
+                                <p>
+                                    <span>10</span>
+                                    Học viện quân sự Liệt Hỏa
+                                </p>
+                                <img src="./assets/img/rank-img10.jpg" alt="">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+
+</div>
+
+@section Scripts {
+    <script src="~/assets/js/script.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <script>
+        var $$j = jQuery.noConflict();
+        var $j = jQuery.noConflict(); // đổi bí danh cho file jquery tránh trùng lặp với thư viện khác ($) => đây còn gọi là cách sử dụng jquery với chế độ không xung đột
+        $j(document).ready(function () {
+            $j('.container-section').hide();
+            $j('.container-section:first-child').fadeIn();
+            $j('.container-tabs .nav_tabs-item').click(function () {
+                // active nav-tabs
+                $j('.container-tabs .nav_tabs-item').removeClass('active')
+                $j(this).addClass('active');
+
+                // show tab-content--item
+                let id_tab_content = $j(this).children('.nav_tabs-link').attr('href')
+                $j('.container-section').hide();
+                $j(id_tab_content).fadeIn();
+                return false;
+            });
+
+
+            var myDiv = $j('#header'); // Tìm thẻ HTML với id = "myDiv"
+            myDiv.addClass("header-container"); // Thêm class "header-container" vào thẻ HTML tìm được
+        });
+
+
+
+
+
+        $j(document).ready(function () {
+            // Lắng nghe sự kiện click vào liên kết của tập phim
+            $j('.play_area-ep-item').click(function (e) {
+                e.preventDefault();
+
+                // Lấy đường dẫn của tập phim được lưu trữ trong thuộc tính data-video của thẻ a
+                var videoSrc = $j(this).data('video');
+
+                // Thay đổi đường dẫn src của thẻ video bằng đường dẫn của tập phim
+                $j('#videoPlayer').attr('src', videoSrc);
+            });
+        });
+
+
+        // Nháy tập số
+        // Lấy phần tử h3 cần cập nhật nội dung
+        var episodeTitle = document.getElementById("episode-title");
+
+        // Lấy danh sách các phần tử li
+        var episodeListItems = document.querySelectorAll("#episode-list li");
+
+        // Duyệt qua từng phần tử li và thêm sự kiện click
+        episodeListItems.forEach(function (item) {
+            item.addEventListener("click", function () {
+                // Cập nhật nội dung của phần tử h3
+                episodeTitle.innerHTML = "@Model.MovieName | Tập " + this.textContent;
+            });
+        });
+    </script>
+
+
+
+
+
+
+}

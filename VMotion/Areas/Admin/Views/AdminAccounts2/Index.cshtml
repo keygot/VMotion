@@ -1,0 +1,614 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<VMotion.Models.TblAccount>
+
+@{
+
+    ViewData["Title"] = "Danh sách tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div id="toastsContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1999;"></div>
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Danh sách tài khoản </li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body" style="padding: 50px ;">
+
+                    <div class="row m-b-30" style="align-items: center; margin-bottom: 30px !important;">
+                        <div class="col-md-8">
+                            <div class="row" style="display: flex; align-items: center;">
+
+                                <div class="col-md-6 mb-3 header" style="box-shadow: none !important; display: flex; justify-content: center; align-items: center; z-index: 0 !important;">
+
+
+                                    <div class="search-bar" style="padding: 0 8px !important;">
+                                        <form class="search-form d-flex align-items-center" method="POST" action="#">
+                                            <input type="text" id="keyword" name="keyword" placeholder="Tìm kiếm" title="Enter search keyword">
+                                            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+
+
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option disabled selected>Chọn quyền</option>
+                                        <option value="All">Chọn tất cả</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" style="text-align: right !important;">
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" id="btnAdd" data-bs-target="#largeModal"><i class="bi bi-plus"></i> Thêm mới</button>
+
+                            @*THÊM MỚI Tài khoản *@
+                            <div class="modal fade" id="largeModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background: #0d6efd;">
+                                            <h5 class="modal-title"><strong style="color: #ffff;" id="modal-title"></strong></h5>
+                                            <button type="button" style="color: #ffff;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" style="text-align: left;">
+                                            <div class="col-lg-12">
+
+
+                                                <!-- Vertical Form -->
+                                                <form class="row g-3">
+                                                    <input hidden id="idAccount" type="text" value="" />
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Họ tên</strong></label>
+                                                        <input type="text" class="form-control" id="fullname">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputEmail4" class="form-label"><strong>Chọn quyền</strong></label>
+                                                        <select class="form-select" id="selectRole" aria-label="Default select example">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Số điện thoại</strong></label>
+                                                        <input type="text" class="form-control" id="phone">
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Email</strong></label>
+                                                        <input type="text" class="form-control" id="email">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label for="inputAddress" class="form-label"><strong>Trạng thái</strong></label>
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                                                <input class="form-check-input" type="checkbox" id="isActive">
+                                                                <label for="IsActive" class="form-check-label">Công khai</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </form><!-- Vertical Form -->
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" id="btnAddAccount">Lưu lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Large Modal-->
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover e-commerce-table" style="margin-bottom: 50px !important;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 1rem !important;">ID</th>
+                                    <th style="padding: 1rem !important;">Họ và tên</th>
+                                    <th style="padding: 1rem !important;">Tên quyền</th>
+                                    <th style="padding: 1rem !important;">Số điện thoại</th>
+                                    <th style="padding: 1rem !important;">Email</th>
+                                    <th style="padding: 1rem !important;">Last login</th>
+                                    <th style="padding: 1rem !important;">#</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="dsAccount" style="vertical-align:-webkit-baseline-middle !important;">
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" id="phanTrang">
+                            </ul>
+                        </nav>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        var trang = 1;
+
+        $(document).ready(function () {
+
+            // Load danh sách menu lên table
+            LoadDsAccount(trang);
+
+            // Load danh sách quyền
+            LoadDsRole();
+
+
+
+        });
+
+        // sự kiện click li phân trang
+        $('#phanTrang').on("click", "li", function (e) {
+            e.preventDefault(); // Bỏ mặc định link href
+            trang = $(this).text();
+            LoadDsAccount(trang);
+
+
+        });
+
+
+
+        // Load danh sách tài khoản
+        function LoadDsAccount(trang) {
+
+            $.ajax({
+                url: '/Admin/AdminAccounts2/DsAccount',
+                type: 'GET',
+                data: {
+                    trang: trang,
+
+                },
+
+                success: function (data) {
+                    //console.log(data);
+
+                    if (data.code == 200) {
+
+                        $('#dsAccount').empty();
+
+                        $.each(data.dsAccount, function (key, value) {
+                            let tr = '<tr id="' + value.accountId + '">'
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.accountId + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.fullName + '</td>';
+
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.roleName + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.phone + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.email + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.lastLogin + '</td>';
+
+
+                            tr += '<td style="min-width: 150px !important;">';
+                            tr += '<a class="btn btn-primary btn-sm" name="xem" data-bs-toggle="modal" data-bs-target="#largeModal" title ="xem"><i class="ri-eye-line" > </i></a >';
+                            tr += '<a class="btn btn-success btn-sm" name="edit" data-bs-toggle="modal" data-bs-target="#largeModal" title ="sửa" style="margin: 0 5px !important;"><i class="ri-edit-2-line"></i></a >';
+                            tr += '<a class="btn btn-danger btn-sm" name="delete" title = "xóa"><i class="bi bi-trash"></i></a >';
+
+                            tr += '</td>';
+
+                            tr += '</tr>';
+
+                            $('#dsAccount').append(tr);
+                        });
+
+                        // Phân trang
+                        if (data.soTrang > 1) {
+                            $('#phanTrang').empty();
+
+                            for (i = 1; i <= data.soTrang; i++) {
+                                let li = '<li class="page-item" name="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+
+                                $('#phanTrang').append(li);
+                            }
+
+                            let li = $('#phanTrang').find('li[name="' + trang + '"]');
+                            $(li).addClass('active');
+
+
+                            //if(trang == 1) {
+                            //    $('#phanTrang li:first').addClass('active');
+                            //}
+
+                        }
+                    }
+                }
+            });
+        }
+
+        //// XÓA TÀI KHOẢN
+        $(document).on('click', "a[name='delete']", function () {
+            let accountId = $(this).closest('tr').attr('id');
+
+            if (confirm("Bạn có thực sự muốn xóa trường này không?")) {
+                // dùng ajax để xóa lớp được chọn
+                $.ajax({
+                    url: '/Admin/AdminAccounts2/Delete',
+                    type: 'POST',
+                    data: {
+                        id: accountId,
+
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            // Xóa thành công
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            // Load lại ds
+                            LoadDsAccount();
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                    }
+                })
+            }
+        });
+
+        //// XEM CHI TIẾT TÀI KHOẢN
+        $(document).on('click', "a[name='xem']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Thông tin chi tiết');
+            let accountId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminAccounts2/Details',
+                type: 'GET',
+                data: {
+                    id: accountId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+
+
+                        $('#selectRole').val(data.tblAccounts.roleId);
+                        $('#fullname').val(data.tblAccounts.fullName);
+                        $('#phone').val(data.tblAccounts.phone);
+                        $('#email').val(data.tblAccounts.email);
+                        if ((data.tblAccounts.isActive) == true) {
+                            $('#isActive').prop('checked', true);
+                        } else {
+                            $('#isActive').prop('checked', false);
+
+                        }
+
+
+
+
+
+                        // Không cho chỉnh sửa dữ liệu
+                        $('#selectRole').prop('disabled', true);
+                        $('#fullname').prop('disabled', true);
+                        $('#phone').prop('disabled', true);
+                        $('#email').prop('disabled', true);
+
+                        $('#isActive').prop('readonly', true);
+
+                        // Gán giá trị cho text hidden có giá trị là idAccount = accountId
+                        $('#idAccount').val(accountId);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddAccount').hide();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            })
+        });
+
+
+        //// Chỉnh sửa TÀI KHOẢN
+        $(document).on('click', "a[name='edit']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Chỉnh sửa tài khoản');
+            let accountId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminAccounts2/Details',
+                type: 'GET',
+                data: {
+                    id: accountId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+                        $('#selectRole').val(data.tblAccounts.roleId);
+                        $('#fullname').val(data.tblAccounts.fullName);
+                        $('#phone').val(data.tblAccounts.phone);
+                        $('#email').val(data.tblAccounts.email);
+                        if ((data.tblAccounts.isActive) == true) {
+                            $('#isActive').prop('checked', true);
+                        } else {
+                            $('#isActive').prop('checked', false);
+
+                        }
+
+
+                        // Gán giá trị cho text hidden có giá trị là idAccount = accountId
+                        $('#idAccount').val(accountId);
+
+
+                        // Cho chỉnh sửa dữ liệu
+                        $('#selectRole').prop('disabled', false);
+                        $('#fullname').prop('disabled', false);
+                        $('#phone').prop('disabled', false);
+                        $('#email').prop('disabled', false);
+
+                        $('#isActive').prop('readonly', false);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddAccount').show();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            })
+        });
+
+        $('#btnAdd').click(function () {
+            // gán title cho modal
+            $('#modal-title').text('Thêm mới');
+
+
+            // Làm trắng các input
+
+            $('#fullname').val('');
+            $('#phone').val('');
+
+            $('#email').val('');
+            $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+
+            $('#idAccount').val('');
+
+
+            //
+            // Cho chỉnh sửa dữ liệu
+            $('#selectRole').prop('disabled', false);
+            $('#fullname').prop('disabled', false);
+            $('#phone').prop('disabled', false);
+            $('#email').prop('disabled', false);
+
+            $('#isActive').prop('readonly', false);
+
+            $('#btnAddAccount').show();
+
+        })
+
+        // THÊM MỚI TÀI KHOẢN
+        // Sự kiện click của button xác nhận thêm mới menu
+        $('#btnAddAccount').click(function () {
+            // Lấy dữ diệu người dùng nhập vào
+            let roleId = $('#selectRole').val().trim();
+            let fullname = $('#fullname').val().trim();
+            let phone = $('#phone').val().trim();
+            let email = $('#email').val().trim();
+            let isActive = $('#isActive').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+
+
+
+
+            // Các ràng buộc dữ liệu
+
+            // Kiểm tra rỗng
+            if (fullname.length == 0) {
+                alert('Vui lòng nhập họ tên');
+                return;
+            } else if (phone.length == 0) {
+                alert('Vui lòng nhập số điện thoại');
+                return;
+            } else if (email.length == 0) {
+                alert('Vui lòng email');
+                return;
+            }
+
+
+            // Kiểm tra giá trị nhập vào có phải là NAN or là số âm hay không?
+            if (phone < 0) {
+                alert('Dữ liệu nhập vào không được âm!');
+                return;
+            }
+
+
+            // Kiểm tra không phải là số
+            if (isNaN(phone)) {
+                alert('Dữ liệu cấp nhập vào phải là số!');
+                return;
+            }
+
+            let idAccount = $('#idAccount').val().trim();
+
+            if (idAccount.length == 0) {
+                // Dùng ajax để thêm mới
+                $.ajax({
+                    url: '/Admin/AdminAccounts2/Create',
+                    type: 'post',
+                    data: {
+                        fullname: fullname,
+                        roleId: roleId,
+                        phone: phone,
+                        email: email,
+                        isActive: isActive
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+                            // Thêm mới thành công
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+
+                            // load lại ds
+                            LoadDsAccount();
+
+                            // Lấy dữ diệu người dùng nhập vào
+                            let fullname = $('#fullname').val('');
+                            let phone = $('#phone').val('');
+                            let email = $('#email').val('');
+                            let isActive = $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+
+
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(fullname, isActive);
+                    }
+
+                });
+            }
+            else {
+                // Cập nhật menu đã tồn tại
+                $.ajax({
+                    url: '/Admin/AdminAccounts2/Edit',
+                    type: 'post',
+                    data: {
+                        id: idAccount,
+                        fullname: fullname,
+                        roleId: roleId,
+                        phone: phone,
+                        email: email,
+                        isActive: isActive
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+
+                            // đóng modal
+
+                            $('#largeModal').modal('hide');
+
+                            // Cập nhật thành công
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+
+
+                            // Load lại danh sách lớp
+                            LoadDsAccount();
+
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+
+        });
+
+        // Lấy danh sách quyền dùng cho thẻ select có id là selectRole
+        function LoadDsRole() {
+            $.ajax({
+                url: '/Admin/AdminRoles/AllRole',
+                type: 'GET',
+                success: function (data) {
+                    $('#selectRole').empty(); // loại bỏ rỗng
+                    if (data.code == 200) {
+                        // Thêm tùy chọn mặc định với giá trị là 0 và đặt thuộc tính "selected"
+                        let optDefault = '<option value="0" selected>Chọn quyền</option>';
+                        $('#selectRole').append(optDefault);
+                        $.each(data.allRole, function (k, v) {
+                            let opt = '<option value="' + v.roleId + '">' + v.roleName + '</option>';
+                            $('#selectRole').append(opt);
+
+                        });
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
+
+}

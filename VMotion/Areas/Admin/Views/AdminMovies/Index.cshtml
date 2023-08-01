@@ -1,0 +1,414 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<VMotion.Models.TblMovie>
+
+@{
+    int CurrentPage = ViewBag.CurrentPage;
+    ViewData["Title"] = "Danh sách phim" + ' ' + CurrentPage;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div id="toastsContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1999;"></div>
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Danh sách phim : Trang @CurrentPage</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body" style="padding: 50px ;">
+                    <div class="row m-b-30" style="align-items: center; margin-bottom: 30px !important;">
+                        <div class="col-md-8">
+                            <div class="row" style="display: flex; align-items: center;">
+
+                                <div class="col-md-6 mb-3 header" style="box-shadow: none !important; display: flex; justify-content: center; align-items: center; z-index: 0 !important;">
+
+
+                                    <div class="search-bar" style="padding: 0 8px !important;">
+                                        <form class="search-form d-flex align-items-center" method="POST" action="#">
+                                            <input type="text" id="keyword" name="keyword" placeholder="Tìm kiếm" title="Enter search keyword">
+                                            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+
+
+                                    <select asp-items="ViewBag.CategoryList" id="txtRoleID" name="txtRoleID" class="form-select" aria-label="Default select example">
+                                        <option value="0" selected="" disabled="">Chọn thể loại</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="text-align: right !important;">
+                            <a class="btn btn-primary rounded-pill" asp-area="Admin" asp-controller="AdminMovies" asp-action="Create">
+                                <i class="anticon anticon-plus-circle m-r-5"></i>
+                                <span>Thêm mới</span>
+                            </a>
+
+                            @*THÊM MỚI TẬP PHIM *@
+                            <div class="modal fade" id="largeModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background: #0d6efd;">
+                                            <h5 class="modal-title"><strong style="color: #ffff;" id="modal-title">Thêm mới tập phim</strong></h5>
+                                            <button type="button" style="color: #ffff;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div id="successAlertContainer"></div>
+
+                                        <div class="modal-body" style="text-align: left;">
+                                            <div class="col-lg-12">
+
+                                                <!-- Vertical Form -->
+                                                <form class="row g-3">
+                                                    <input hidden id="idMovie" type="text" value="" />
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Tập số</strong></label>
+                                                        <input type="number" class="form-control" id="EpisodeNumber">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Ngày phát sóng</strong></label>
+                                                        <input type="date" class="form-control" id="ReleaseDate">
+                                                    </div>
+                                                   
+                                                     <div class="col-12">
+                                                        <label for="Thumb" class="col-sm-2 col-form-label"><strong>Hình ảnh</strong></label>
+                                                        <div class="col-sm-12">
+                                                            <div class="input-group mb-3">
+                                                                <div class="input-group-prepend">
+                                                                    <button class="btn btn-secondary" type="button" onclick="openDialog('Img')">Chọn ảnh</button>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="Img" />
+                                                                <span class="text-danger"></span>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label for="Thumb" class="col-sm-2 col-form-label"><strong>Video</strong></label>
+                                                        <div class="col-sm-12">
+                                                            <div class="input-group mb-3">
+                                                                <div class="input-group-prepend">
+                                                                    <button class="btn btn-secondary" type="button" onclick="openDialog('Video')">Chọn tập</button>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="Video" />
+                                                                <span class="text-danger"></span>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="col-12">
+                                                        <label for="inputAddress" class="form-label"><strong>Mô tả thêm (Nếu có)</strong></label>
+                                                        <div class="col-sm-12">
+                                                            <textarea id="Description">
+
+                                                            </textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label for="inputAddress" class="form-label"><strong>Trạng thái</strong></label>
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                                                <input class="form-check-input" type="checkbox" id="isActive">
+                                                                <label for="IsActive" class="form-check-label">Công khai</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+                                                </form><!-- Vertical Form -->
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" id="btnAddEpisode">Lưu lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Large Modal-->
+                        
+                        
+                         
+                           
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover e-commerce-table" style="margin-bottom: 50px !important;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 1rem !important;">ID</th>
+                                    <th style="padding: 1rem !important;">Tên phim</th>
+                                    <th style="padding: 1rem !important;">Danh mục</th>
+                                    <th style="padding: 1rem !important;">Ngày sản xuất</th>
+
+                                    <th style="padding: 1rem !important;">Trạng thái</th>
+                                    <th style="padding: 1rem !important;">#</th>
+                                </tr>
+                            </thead>
+                            <tbody id="records_table" style="vertical-align:-webkit-baseline-middle !important;">
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr id="@item.MovieId">
+                                            <td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">@item.MovieId</td>
+                                            <td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">
+                                                <a asp-area="Admin" asp-controller="AdminMovies" asp-action="Details" asp-route-MovieId="@item.MovieId">@item.MovieName</a>
+                                            </td>
+                                            <td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">
+                                                @if(item.CategoryId != null) {
+                                                    @item.Category.CategoryName
+                                                }
+
+                                                
+
+                                            </td>
+                                            <td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important; min-width: 100px !important;">
+                                                @if(item.ReleaseDate != null) {
+                                                    @item.ReleaseDate.Value.ToString("dd/MM/yyyy")
+                                                }
+                                            </td>
+
+                                            
+
+                                            <td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">
+                                                @if (item.IsActive == true)
+                                                {
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-primary">Hiển thị</span>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-secondary">Không hiển thị</span>
+
+                                                    </div>
+                                                }
+                                            </td>
+                                            
+
+                                            <td style="min-width: 150px !important;">
+                                                <a class="btn btn-secondary btn-sm" title="Thêm tập phim" data-bs-toggle="modal" data-bs-target="#largeModal">
+                                                    <i class="ri-add-circle-line"></i>
+                                                </a>
+                                                <a class="btn btn-primary btn-sm" title="Xem chi tiết" asp-area="Admin" asp-controller="AdminMovies" asp-action="Details" asp-route-id="@item.MovieId"><i class="ri-eye-line"></i></a>
+                                                <a class="btn btn-success btn-sm" title="sửa" asp-area="Admin" asp-controller="AdminMovies" asp-action="Edit" asp-route-id="@item.MovieId"><i class="ri-edit-2-line"></i></a>
+                                                <a class="btn btn-danger btn-sm" title="Xóa" asp-area="Admin" asp-controller="AdminMovies" asp-action="Delete" name="delete" asp-route-MovieId="@item.MovieId"><i class="bi bi-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+
+                            </tbody>
+                        </table>
+
+                        <nav aria-label="Page navigation example">
+
+                            @if (Model.PageCount > 1)
+                            {
+                                <pager class="pager-container" list="@Model" asp-area="Admin" asp-controller="AdminMovies" asp-route-CategoryID="@ViewBag.CurrrentRoleID" asp-action="Index" options="PagedListRenderOptions.Bootstrap4PageNumbersOnly" />
+
+                            }
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+@section Scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            
+
+
+            let movieId = 0; // Khai báo biến movieId ở đây
+
+
+            $('table').on('click', 'tr', function () {
+                movieId = $(this).attr('id');
+               // console.log(movieId);
+
+            });
+
+
+            // XÓA PHIM
+            $(document).on('click', "a[name='delete']", function () {
+                
+
+                if (confirm("Bạn có thực sự muốn xóa trường này không?")) {
+                    // dùng ajax để xóa lớp được chọn
+                    $.ajax({
+                        url: '/Admin/AdminMovies/Delete',
+                        type: 'POST',
+                        data: {
+                            id: movieId,
+
+                        },
+                        success: function (data) {
+                            if (data.code == 200) {
+                                alert(data.msg);
+                                
+                            } else {
+                                alert(data.msg);
+                            }
+                        }
+                    })
+                }
+            });
+
+
+
+            // THÊM MỚI TẬP PHIM
+            // Sự kiện click của button xác nhận thêm mới
+            $('#btnAddEpisode').click(function () {
+               
+               
+                // Lấy dữ diệu người dùng nhập vào
+                let EpisodeNumber = $('#EpisodeNumber').val().trim();
+                let Img = $('#Img').val().trim();
+                let Video = $('#Video').val().trim();
+                let Description = $('#Description').val().trim();
+                let ReleaseDate = $('#ReleaseDate').val().trim();
+                let isActive = $('#isActive').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+
+
+
+               
+                // Các ràng buộc dữ liệu
+
+                // Kiểm tra rỗng
+                if (EpisodeNumber.length == 0) {
+                    alert('Trường tập số không được để trống!');
+                    return;
+                } else if (Video.length == 0) {
+                    alert('Vui lòng chọn video của tập phim');
+                    return;
+                }
+                else if (ReleaseDate.length == 0) {
+                    alert('Vui lòng nhập ngày phát sóng!');
+                    return;
+                }
+
+                else if (Img.length == 0) {
+                    alert('Vui lòng chọn hình ảnh đại diện!');
+                    return;
+                }
+                
+
+
+                // Kiểm tra giá trị nhập vào có phải là NAN or là số âm hay không?
+                if (EpisodeNumber < 0) {
+                    alert('Trường tập số không nhận giá trị âm!');
+                    return;
+                }
+
+
+               
+                $.ajax({
+                    url: '/Admin/AdminEpisodes/AddEpisode',
+                    type: 'post',
+                    data: {
+                        episodeNumber: EpisodeNumber,
+                        video: Video,
+                        img: Img,
+                        description: Description,
+                        releaseDate: ReleaseDate,
+                        movieId: movieId,
+                        isActive: isActive
+                    },
+                    success: function (data) {
+
+                        //console.log(data);
+
+                        if(data.code == 400) {
+                            // Tạo phần tử thông báo là trường tập số đã tồn tại
+                            var successToast = $('<div class="toast align-items-center text-white bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body"><i class="bi bi-exclamation-triangle me-1"></i>' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 10000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            
+                        }
+                        else if (data.code == 200) {
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            let EpisodeNumber = $('#EpisodeNumber').val('');
+                            let Video = $('#Video').val('');
+                            let Description = $('#Description').val('');
+                            let ReleaseDate = $('#ReleaseDate').val('');
+
+                            let isActive = $('#isActive').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                       // console.log(EpisodeNumber, isActive, movieId);
+                    }
+                });
+
+
+            });
+     
+        });
+
+       
+
+
+    </script>
+
+
+    @{
+        var summerNote = new VMotion.Areas.Admin.Models.SummerNote("#Description");
+
+    <partial name="_SummerNote" model="summerNote" />
+    }
+
+}

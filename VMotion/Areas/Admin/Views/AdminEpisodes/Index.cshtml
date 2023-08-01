@@ -1,0 +1,640 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<VMotion.Models.TblEpisode>
+
+
+@{
+    ViewData["Title"] = "Danh sách tập phim";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Danh sách tập phim : Trang @ViewBag.CurrentPage</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body" style="padding: 50px ;">
+                    <div class="row m-b-30" style="align-items: center; margin-bottom: 30px !important;">
+                        <div class="col-md-8">
+                            <div class="row">
+
+
+                                <div class="col-md-6 mb-3 header" style="box-shadow: none !important; display: flex; justify-content: center; align-items: center; z-index: 0 !important;">
+
+
+                                    <div class="search-bar" style="padding: 0 8px !important;">
+                                        <form class="search-form d-flex align-items-center" method="POST" action="#">
+                                            <input type="text" id="keyword" name="keyword" placeholder="Tìm kiếm" title="Enter search keyword">
+                                            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+
+                                    @* <select asp-items="@(new SelectList(ViewBag.slideList, "Value", "Text"))" id="txtslideID" name="txtslideID" class="form-select" aria-label="Default select example">
+                                    <option disabled selected>Chọn slide</option>
+                                    <option value="All">Chọn tất cả</option>
+                                    </select>*@
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" style="text-align: right !important;">
+
+
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" id="btnAdd" data-bs-target="#largeModal"><i class="bi bi-plus"></i> Thêm mới</button>
+
+                            @*THÊM MỚI TẬP PHIM *@
+                            <div class="modal fade" id="largeModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background: #0d6efd;">
+                                            <h5 class="modal-title"><strong style="color: #ffff;" id="modal-title"></strong></h5>
+                                            <button type="button" style="color: #ffff;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" style="text-align: left;">
+                                            <div class="col-lg-12">
+                                                
+                                               <!-- Vertical Form -->
+                                                <form class="row g-3">
+                                                    <input hidden id="idMovie" type="text" value="" />
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Tập số</strong></label>
+                                                        <input type="number" class="form-control" id="EpisodeNumber">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Ngày phát sóng</strong></label>
+                                                        <input type="date" class="form-control" id="ReleaseDate">
+                                                    </div>
+                                                   
+                                                     <div class="col-12">
+                                                        <label for="Thumb" class="col-sm-2 col-form-label"><strong>Hình ảnh</strong></label>
+                                                        <div class="col-sm-12">
+                                                            <div class="input-group mb-3">
+                                                                <div class="input-group-prepend">
+                                                                    <button class="btn btn-secondary" type="button" onclick="openDialog('Img')">Chọn ảnh</button>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="Img" />
+                                                                <span class="text-danger"></span>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label for="Thumb" class="col-sm-2 col-form-label"><strong>Video</strong></label>
+                                                        <div class="col-sm-12">
+                                                            <div class="input-group mb-3">
+                                                                <div class="input-group-prepend">
+                                                                    <button class="btn btn-secondary" type="button" onclick="openDialog('Video')">Chọn tập</button>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="Video" />
+                                                                <span class="text-danger"></span>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="col-12">
+                                                        <label for="inputAddress" class="form-label"><strong>Mô tả thêm (Nếu có)</strong></label>
+                                                        <div class="col-sm-12">
+                                                            <textarea id="Description">
+
+                                                            </textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label for="inputAddress" class="form-label"><strong>Trạng thái</strong></label>
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                                                <input class="form-check-input" type="checkbox" id="isActive">
+                                                                <label for="IsActive" class="form-check-label">Công khai</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+                                                </form><!-- Vertical Form -->
+
+
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" id="btnAddEpisode">Lưu lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Large Modal-->
+
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover e-commerce-table" style="margin-bottom: 50px !important;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 1rem !important;">ID</th>
+                                    <th style="padding: 1rem !important;">Hình ảnh</th>
+                                    <th style="padding: 1rem !important;">Phim</th>
+                                    <th style="padding: 1rem !important;">Tập số</th>
+
+                                    <th style="padding: 1rem !important;">Ngày phát hành</th>
+                                    <th style="padding: 1rem !important;">Trạng thái</th>
+                                    <th style="padding: 1rem !important;">Chức năng</th>
+
+
+
+                                </tr>
+                            </thead>
+
+                            @*// Danh sách tập phim*@
+                            <tbody id="dsEpisode" style="vertical-align:-webkit-baseline-middle !important;">
+
+                                @*Hàm LoaddsEpisode() sẽ hiển thị ở đây*@
+
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" id="phanTrang">
+                            </ul>
+                        </nav>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+
+@section Scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+
+        //
+
+        var trang = 1;
+
+        $(document).ready(function () {
+
+            // Load danh sách tập phim lên table
+            LoaddsEpisode(trang);
+
+            // Load danh sách phim
+           // LoadDsMovie();
+           
+        });
+
+        // sự kiện click li phân trang
+        $('#phanTrang').on("click", "li", function (e) {
+            e.preventDefault(); // Bỏ mặc định link href
+            trang = $(this).text();
+            LoaddsEpisode(trang);
+
+
+        });
+
+
+        // Phần này để tìm kiếm Danh sách slide
+        $("#keyword").keyup(function () {
+            var strkeyword = $('#keyword').val();
+            $.ajax({
+                url: '/Admin/Search/FindSlide/',
+                datatype: "json",
+                type: "POST",
+                data: { keyword: strkeyword },
+                async: true,
+                success: function (results) {
+                    $("#dsSlide").html("");
+                    $("#dsSlide").html(results);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            });
+        });
+
+
+        // Load danh sách slide
+        function LoaddsEpisode(trang) {
+
+            $.ajax({
+                url: '/Admin/AdminEpisodes/DsEpisode',
+                type: 'GET',
+                data: {
+                    trang: trang,
+
+                },
+
+                success: function (data) {
+                   console.log(data);
+
+                    if (data.code == 200) {
+
+                        $('#dsEpisode').empty();
+
+                        $.each(data.dsEpisode, function (key, value) {
+                            let tr = '<tr id="' + value.episodeId + '">'
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.episodeId + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;"> <img src="'+ value.img +'" style="width: 50%;"/></td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.movieName + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.episodeNumber + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.releaseDate + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.isActive + '</td>';
+
+                            tr += '<td style="min-width: 150px !important;">';
+                            tr += '<a class="btn btn-primary btn-sm" name="xem" data-bs-toggle="modal" data-bs-target="#largeModal" title ="xem"><i class="ri-eye-line" > </i></a >';
+                            tr += '<a class="btn btn-success btn-sm" name="edit" data-bs-toggle="modal" data-bs-target="#largeModal" title ="sửa" style="margin: 0 5px !important;"><i class="ri-edit-2-line"></i></a >';
+                            tr += '<a class="btn btn-danger btn-sm" name="delete" title = "xóa"><i class="bi bi-trash"></i></a >';
+
+                            tr += '</td>';
+
+                            tr += '</tr>';
+
+                            $('#dsEpisode').append(tr);
+                        });
+
+                        // Phân trang
+                        if (data.soTrang > 1) {
+                            $('#phanTrang').empty();
+
+                            for (i = 1; i <= data.soTrang; i++) {
+                                let li = '<li class="page-item" name="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+
+                                $('#phanTrang').append(li);
+                            }
+
+                            let li = $('#phanTrang').find('li[name="' + trang + '"]');
+                            $(li).addClass('active');
+
+
+                            //if(trang == 1) {
+                            //    $('#phanTrang li:first').addClass('active');
+                            //}
+
+                        }
+                    }
+                }
+            });
+        }
+
+        //// XÓA slide
+        //$(document).on('click', "a[name='delete']", function () {
+        //    let sliderId = $(this).closest('tr').attr('id');
+
+        //    if (confirm("Bạn có thực sự muốn xóa trường này không?")) {
+        //        // dùng ajax để xóa lớp được chọn
+        //        $.ajax({
+        //            url: '/Admin/AdminEpisodes/Delete',
+        //            type: 'POST',
+        //            data: {
+        //                id: sliderId,
+
+        //            },
+        //            success: function (data) {
+        //                if (data.code == 200) {
+        //                    alert(data.msg);
+        //                    LoaddsEpisode();
+        //                } else {
+        //                    alert(data.msg);
+        //                }
+        //            }
+        //        })
+        //    }
+        //});
+
+        //// XEM CHI TIẾT slide
+        //$(document).on('click', "a[name='xem']", function () {
+        //    // gán title cho modal
+        //    $('#modal-title').text('Thông tin chi tiết');
+        //    let sliderId = $(this).closest('tr').attr('id');
+
+        //    $.ajax({
+        //        url: '/Admin/AdminEpisodes/Details',
+        //        type: 'GET',
+        //        data: {
+        //            id: sliderId
+        //        },
+        //        success: function (data) {
+        //            console.log(data);
+        //            if (data.code == 200) {
+        //                // Nếu lấy thông tin thành công
+        //                $('#selectMovie').val(data.tblSlides.movieId);
+        //                $('#title').val(data.tblSlides.title);
+        //                $('#abstract').val(data.tblSlides.abstract);
+        //                $('#slideOrder').val(data.tblSlides.sliderOrder);
+        //                $('#ImgBGMax').val(data.tblSlides.imgBgmax);
+        //                $('#ImgBGMin').val(data.tblSlides.imgBgmin);
+        //                $('#ImgBGName').val(data.tblSlides.imgName);
+
+        //                if ((data.tblSlides.isActive) == true) {
+        //                    $('#isActive').prop('checked', true);
+        //                } else {
+        //                    $('#isActive').prop('checked', false);
+
+        //                }
+
+
+
+        //                //Không cho chỉnh sửa dữ liệu
+        //                $('#selectMovie').prop('disabled', true);
+        //                $('#title').prop('disabled', true);
+        //                $('#abstract').prop('disabled', true);
+        //                $('#slideOrder').prop('disabled', true);
+        //                $('#ImgBGMax').prop('disabled', true);
+        //                $('#ImgBGMin').prop('disabled', true);
+        //                $('#ImgBGName').prop('disabled', true);
+        //                $('#isActive').prop('readonly', true);
+
+        //                // Gán giá trị cho text hidden có giá trị là idSlide = slideId
+        //                $('#idSlide').val(sliderId);
+
+        //                // Ẩn nút lưu lại
+        //                $('#btnAddSlide').hide();
+
+        //            } else {
+        //                alert(data.msg);
+        //            }
+        //        }
+        //    })
+        //});
+
+
+        //// Chỉnh sửa slide
+        //$(document).on('click', "a[name='edit']", function () {
+        //    // gán title cho modal
+        //    $('#modal-title').text('Chỉnh sửa slide');
+        //    let slideId = $(this).closest('tr').attr('id');
+
+        //    $.ajax({
+        //        url: '/Admin/AdminEpisodes/Details',
+        //        type: 'GET',
+        //        data: {
+        //            id: slideId
+        //        },
+        //        success: function (data) {
+        //            if (data.code == 200) {
+        //                // Nếu lấy thông tin thành công
+
+        //                $('#selectMovie').val(data.tblSlides.movieId);
+        //                $('#title').val(data.tblSlides.title);
+        //                $('#abstract').val(data.tblSlides.abstract);
+        //                $('#slideOrder').val(data.tblSlides.sliderOrder);
+        //                $('#ImgBGMax').val(data.tblSlides.imgBgmax);
+        //                $('#ImgBGMin').val(data.tblSlides.imgBgmin);
+        //                $('#ImgBGName').val(data.tblSlides.imgName);
+        //                if ((data.tblSlides.isActive) == true) {
+        //                    $('#isActive').prop('checked', true);
+        //                } else {
+        //                    $('#isActive').prop('checked', false);
+
+        //                }
+
+        //                // Gán giá trị cho text hidden có giá trị là idSlide = slideId
+        //                $('#idSlide').val(slideId);
+
+
+        //                // Cho chỉnh sửa dữ liệu
+        //                $('#selectMovie').prop('disabled', false);
+        //                $('#title').prop('disabled', false);
+        //                $('#abstract').prop('disabled', false);
+        //                $('#slideOrder').prop('disabled', false);
+        //                $('#ImgBGMax').prop('disabled', false);
+        //                $('#ImgBGMin').prop('disabled', false);
+        //                $('#ImgBGName').prop('disabled', false);
+        //                $('#isActive').prop('readonly', false);
+
+        //                // Ẩn nút lưu lại
+        //                $('#btnAddSlide').show();
+
+        //            } else {
+        //                alert(data.msg);
+        //            }
+        //        }
+        //    })
+        //});
+
+        //$('#btnAdd').click(function () {
+        //    // gán title cho modal
+        //    $('#modal-title').text('Thêm mới');
+
+
+        //    // Làm trắng các input
+        //    //$('#selectMovie').val('');
+        //    $('#title').val('');
+        //    $('#abstract').val('');
+        //    $('#slideOrder').val('');
+        //    $('#ImgBGMax').val('');
+        //    $('#ImgBGMin').val('');
+        //    $('#ImgBGName').val('');
+        //    $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+
+            
+        //    $('#idSlide').val('');
+
+
+        //    //
+        //    // Cho chỉnh sửa dữ liệu
+        //    $('#selectMovie').prop('disabled', false); 
+        //    $('#title').prop('disabled', false);
+        //    $('#abstract').prop('disabled', false);
+        //    $('#slideOrder').prop('disabled', false);
+        //    $('#ImgBGMax').prop('disabled', false);
+        //    $('#ImgBGMin').prop('disabled', false);
+        //    $('#ImgBGName').prop('disabled', false);
+        //    $('#isActive').prop('readonly', false);
+
+        //    $('#btnAddSlide').show();
+
+        //})
+
+        //// THÊM MỚI slide
+        //// Sự kiện click của button xác nhận thêm mới slide
+        //$('#btnAddSlide').click(function () {
+        //    // Lấy dữ diệu người dùng nhập vào
+        //    let movieId = $('#selectMovie').val().trim(); 
+        //    let title = $('#title').val().trim();
+        //    let abstract = $('#abstract').val().trim();
+        //    let slideOrder = $('#slideOrder').val().trim();
+        //    let ImgBGMax = $('#ImgBGMax').val().trim();
+        //    let ImgBGMin = $('#ImgBGMin').val().trim();
+        //    let ImgBGName = $('#ImgBGName').val().trim();
+        //    let isActive = $('#isActive').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+
+
+
+
+        //    // Các ràng buộc dữ liệu
+
+        //    // Kiểm tra rỗng
+        //    if (title.length == 0) {
+        //        alert('Trường tiêu đề không được để trống!');
+        //        return;
+        //    } else if (slideOrder.length == 0) {
+        //        alert('Vui lòng thứ tự sắp xếp slide');
+        //        return;
+        //    }
+        //    else if (ImgBGMax.length == 0) {
+        //        alert('Vui lòng chọn hình ảnh lớn!');
+        //        return;
+        //    }
+        //    else if (ImgBGMin.length == 0) {
+        //        alert('Vui lòng chọn hình ảnh nhỏ!');
+        //        return;
+        //    }
+        //    else if (ImgBGName.length == 0) {
+        //        alert('Vui lòng chọn hình ảnh chứa tên!');
+        //        return;
+        //    }
+
+
+        //    // Kiểm tra giá trị nhập vào có phải là NAN or là số âm hay không?
+        //    if (slideOrder < 0) {
+        //        alert('Thứ tự sắp xếp không nhận giá trị âm!');
+        //        return;
+        //    }
+
+           
+
+        //    if (isNaN(slideOrder)) {
+        //        alert('Thứ tự sắp xếp nhập vào phải là số!');
+        //        return;
+        //    }
+
+            
+        //    let idSlide = $('#idSlide').val().trim();
+
+        //    if (idSlide.length == 0) {
+        //        // Dùng ajax để thêm mới
+        //        $.ajax({
+        //            url: '/Admin/AdminEpisodes/Create',
+        //            type: 'post',
+        //            data: {
+        //                movieId: movieId,
+        //                title: title,
+        //                abstract: abstract,
+        //                slideOrder: slideOrder,
+        //                imgBGMax: ImgBGMax,
+        //                imgBGMin: ImgBGMin,
+        //                imgName: ImgBGName,
+        //                isActive: isActive
+        //            },
+        //            success: function (data) {
+        //                console.log(data);
+        //                if (data.code == 200) {
+        //                    alert(data.msg);
+        //                    LoaddsEpisode();
+
+        //                    let title = $('#title').val('');
+        //                    let abstract = $('#abstract').val('');
+        //                    let slideOrder = $('#slideOrder').val('');
+        //                    let ImgBGMax = $('#ImgBGMax').val('');
+        //                    let ImgBGMin = $('#ImgBGMin').val('');
+        //                    let ImgBGName = $('#ImgBGName').val('');
+        //                    let isActive = $('#isActive').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+
+        //                } else {
+        //                    alert(data.msg);
+        //                }
+        //                //console.log(slideName, isActive);
+        //            }
+
+        //        });
+        //    }
+        //    else {
+        //        // Cập nhật slide đã tồn tại
+        //        $.ajax({
+        //            url: '/Admin/AdminEpisodes/Edit',
+        //            type: 'post',
+        //            data: {
+        //                id: idSlide,
+        //                movieId: movieId,
+        //                title: title,
+        //                abstract: abstract,
+        //                slideOrder: slideOrder,
+        //                imgBgmin: ImgBGMin,
+        //                imgBgmax: ImgBGMax,
+        //                imgName: ImgBGName,
+        //                isActive: isActive
+        //            },
+        //            success: function (data) {
+        //                console.log(data);
+        //                if (data.code == 200) {
+        //                    // Cập nhật thành công
+        //                    alert(data.msg);
+
+        //                    // đóng modal
+
+        //                    $('#largeModal').modal('hide');
+
+        //                    // Load lại danh sách lớp
+        //                    LoaddsEpisode();
+
+        //                } else {
+        //                    alert(data.msg);
+        //                }
+        //                //console.log(slideName, isActive);
+        //            }
+
+        //        });
+        //    }
+
+        //});
+
+
+        // Lấy danh sách phim dùng cho thẻ select có id là selectMovie
+
+        function LoadDsMovie() {
+            $.ajax({
+                url: '/Admin/AdminMovies/AllMovie',
+                type: 'GET',
+                success: function (data) {
+                    $('#selectMovie').empty(); // Tránh trường hợp bị nạp chồng
+
+
+                    if (data.code == 200) {
+                        $.each(data.allMovie, function (k, v) {
+                            let opt = '<option value="' + v.movieId + '" selected="">' + v.movieName + '</option>';
+                            $('#selectMovie').append(opt);
+
+                        });
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+    </script>
+
+    @{
+        var summerNote = new VMotion.Areas.Admin.Models.SummerNote("#Description");
+
+    <partial name="_SummerNote" model="summerNote" />
+    }
+}

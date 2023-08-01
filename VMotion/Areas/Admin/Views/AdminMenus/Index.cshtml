@@ -1,0 +1,713 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<VMotion.Models.TblMenu>
+
+@{
+
+    ViewData["Title"] = "Danh sách menu";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div id="toastsContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1999;"></div>
+
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Danh sách menu : Trang @ViewBag.CurrentPage</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body" style="padding: 50px ;">
+                    <div class="row m-b-30" style="align-items: center; margin-bottom: 30px !important;">
+                        <div class="col-md-8">
+                            <div class="row" style="display: flex; align-items: center;">
+
+
+                                <div class="col-md-6 mb-3 header" style="box-shadow: none !important; display: flex; justify-content: center; align-items: center; z-index: 0 !important;">
+
+
+                                    <div class="search-bar" style="padding: 0 8px !important;">
+                                        <form class="search-form d-flex align-items-center" method="POST" action="#">
+                                            <input type="text" id="txtSearch" name="keyword" placeholder="Tìm kiếm..." title="Enter search keyword">
+                                            <button id="btnSearch" type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+
+
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option disabled selected>Chọn menu</option>
+                                        <option value="All">Chọn tất cả</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" style="text-align: right !important;">
+
+
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" id="btnAdd" data-bs-target="#largeModal"><i class="bi bi-plus"></i> Thêm mới</button>
+
+                            @*THÊM MỚI MENU *@
+                            <div class="modal fade" id="largeModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background: #0d6efd;">
+                                            <h5 class="modal-title"><strong style="color: #ffff;" id="modal-title"></strong></h5>
+                                            <button type="button" style="color: #ffff;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" style="text-align: left;">
+                                            <div class="col-lg-12">
+
+
+                                                <!-- Vertical Form -->
+                                                <form class="row g-3">
+                                                    <input hidden id="idMenu" type="text" value="" />
+                                                    <div class="col-6">
+                                                        <label for="inputNanme4" class="form-label"><strong>Tên menu</strong></label>
+                                                        <input type="text" class="form-control" id="menuName">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputEmail4" class="form-label"><strong>Menu cha</strong></label>
+                                                        <select class="form-select" id="selectMenu" aria-label="Default select example">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputEmail4" class="form-label"><strong>Danh mục</strong></label>
+                                                        <select class="form-select" id="selectCategory" aria-label="Default select example">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputEmail4" class="form-label"><strong>Cấp</strong></label>
+                                                        <input type="number" class="form-control" id="levels">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputPassword4" class="form-label"><strong>Thứ tự</strong></label>
+                                                        <input type="number" class="form-control" id="menuOrder">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="inputAddress" class="form-label"><strong>Vị trí</strong></label>
+                                                        <input type="text" class="form-control" id="position">
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label for="inputAddress" class="form-label"><strong>Trạng thái</strong></label>
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check form-switch" style="padding-bottom: 8px !important;">
+                                                                <input class="form-check-input" type="checkbox" id="isActive">
+                                                                <label for="IsActive" class="form-check-label">Công khai</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </form><!-- Vertical Form -->
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" id="btnAddMenu">Lưu lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Large Modal-->
+
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover e-commerce-table" style="margin-bottom: 50px !important;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 1rem !important;">ID</th>
+                                    <th style="padding: 1rem !important;">Tiêu đề</th>
+                                    <th style="padding: 1rem !important;">Mức</th>
+                                    <th style="padding: 1rem !important;">Menu Cha</th>
+
+                                    <th style="padding: 1rem !important;">Thứ tự</th>
+                                    <th style="padding: 1rem !important;">Trạng thái</th>
+                                    <th style="padding: 1rem !important;">Chức năng</th>
+
+
+
+                                </tr>
+                            </thead>
+
+                            @*// Danh sách menu*@
+                            <tbody id="dsMenu" style="vertical-align:-webkit-baseline-middle !important;">
+
+                                @*Hàm LoadDsMenu() sẽ hiển thị ở đây*@
+
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" id="phanTrang">
+                            </ul>
+                        </nav>
+                        @*<nav aria-label="Page navigation example">
+
+                        @* @if(Model.PageCount > 1) {
+                        <pager class="pager-container" list="@Model" asp-area="Admin" asp-controller="AdminMenus" asp-action="Index" asp-route-MenuID="ViewBag.CurrentMenuID" options="PagedListRenderOptions.Bootstrap4PageNumbersOnly" />
+
+                        }
+
+                        </nav>*@
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+@section Scripts {
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+
+        //
+
+        var trang = 1;
+
+        $(document).ready(function () {
+
+            // Load danh sách menu lên table
+            LoadDsMenu(trang);
+
+
+            // Load danh sách danh mục và thẻ select
+            LoadDsCategory();
+
+            // Load danh sách menu cha của thẻ select
+            LoadDsMenuParent();
+        });
+
+        // sự kiện click li phân trang
+        $('#phanTrang').on("click", "li", function (e) {
+            e.preventDefault(); // Bỏ mặc định link href
+            trang = $(this).text();
+            LoadDsMenu(trang);
+
+
+        });
+
+
+        // Phần này để tìm kiếm Danh sách menu
+        $('#btnSearch').click(function () {
+            let search = $('#txtSearch').val();
+            LoadDsMenu(trang, search);
+        })
+       
+
+
+        // Load danh sách Menu
+        function LoadDsMenu(trang, search) {
+
+            $.ajax({
+                url: '/Admin/AdminMenus/DsMenu',
+                type: 'GET',
+                data: {
+                    trang: trang,
+                    tuKhoa: search,
+
+                },
+
+                success: function (data) {
+                    //console.log(data);
+
+                    if (data.code == 200) {
+
+                        $('#dsMenu').empty();
+
+                        $.each(data.dsMenu, function (key, value) {
+                            let tr = '<tr id="' + value.menuId + '">'
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.menuId + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.menuName + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.levels + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.parentId + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.menuOrder + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.isActive + '</td>';
+
+                            tr += '<td style="min-width: 150px !important;">';
+                            tr += '<a class="btn btn-primary btn-sm" name="xem" data-bs-toggle="modal" data-bs-target="#largeModal" title ="xem"><i class="ri-eye-line" > </i></a >';
+                            tr += '<a class="btn btn-success btn-sm" name="edit" data-bs-toggle="modal" data-bs-target="#largeModal" title ="sửa" style="margin: 0 5px !important;"><i class="ri-edit-2-line"></i></a >';
+                            tr += '<a class="btn btn-danger btn-sm" name="delete" title = "xóa"><i class="bi bi-trash"></i></a >';
+
+                            tr += '</td>';
+
+                            tr += '</tr>';
+
+                            $('#dsMenu').append(tr);
+                        });
+
+                        // Phân trang
+                        if (data.soTrang > 1) {
+                            $('#phanTrang').empty();
+
+                            for (i = 1; i <= data.soTrang; i++) {
+                                let li = '<li class="page-item" name="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+
+                                $('#phanTrang').append(li);
+                            }
+
+                            let li = $('#phanTrang').find('li[name="' + trang + '"]');
+                            $(li).addClass('active');
+
+
+                            //if(trang == 1) {
+                            //    $('#phanTrang li:first').addClass('active');
+                            //}
+
+                        }
+                    }
+                }
+            });
+        }
+
+        //// XÓA MENU
+        $(document).on('click', "a[name='delete']", function () {
+            let menuId = $(this).closest('tr').attr('id');
+
+            if (confirm("Bạn có thực sự muốn xóa trường này không?")) {
+                // dùng ajax để xóa lớp được chọn
+                $.ajax({
+                    url: '/Admin/AdminMenus/Delete',
+                    type: 'POST',
+                    data: {
+                        id: menuId,
+
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                             // Cập nhật thành công
+
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            // Load lại danh sách
+                            LoadDsMenu();
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                    }
+                })
+            }
+        });
+
+        //// XEM CHI TIẾT MENU
+        $(document).on('click', "a[name='xem']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Thông tin chi tiết');
+            let menuId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminMenus/Details',
+                type: 'GET',
+                data: {
+                    id: menuId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+                        $('#selectMenu').val(data.tblMenus.parentId); // Lấy id của menu đc chọn là menu cha
+                        $('#selectCategory').val(data.tblMenus.categoryId);
+                        $('#menuName').val(data.tblMenus.menuName);
+                        $('#levels').val(data.tblMenus.levels);
+                        $('#menuOrder').val(data.tblMenus.menuOrder);
+                        $('#position').val(data.tblMenus.position);
+                        if ((data.tblMenus.isActive) == true) {
+                            $('#isActive').prop('checked', true);
+                        } else {
+                            $('#isActive').prop('checked', false);
+
+                        }
+
+
+
+
+
+                        // Không cho chỉnh sửa dữ liệu
+                        $('#selectMenu').prop('disabled', true); // Lấy id của menu đc chọn là menu cha
+                        $('#selectCategory').prop('disabled', true);
+                        $('#menuName').prop('disabled', true);
+                        $('#levels').prop('disabled', true);
+                        $('#menuOrder').prop('disabled', true);
+                        $('#position').prop('disabled', true);
+                        $('#isActive').prop('readonly', true);
+
+                        // Gán giá trị cho text hidden có giá trị là idMenu = menuId
+                        $('#idMenu').val(menuId);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddMenu').hide();
+
+                    } else {
+                         // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                    }
+                }
+            })
+        });
+
+
+        //// Chỉnh sửa MENU
+        $(document).on('click', "a[name='edit']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Chỉnh sửa menu');
+            let menuId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminMenus/Details',
+                type: 'GET',
+                data: {
+                    id: menuId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+                        $('#selectMenu').val(data.tblMenus.parentId); // Lấy id của menu đc chọn là menu cha
+                        $('#selectCategory').val(data.tblMenus.categoryId);
+                        $('#menuName').val(data.tblMenus.menuName);
+                        $('#levels').val(data.tblMenus.levels);
+                        $('#menuOrder').val(data.tblMenus.menuOrder);
+                        $('#position').val(data.tblMenus.position);
+                        if ((data.tblMenus.isActive) == true) {
+                            $('#isActive').prop('checked', true);
+                        } else {
+                            $('#isActive').prop('checked', false);
+
+                        }
+
+                        // Gán giá trị cho text hidden có giá trị là idMenu = menuId
+                        $('#idMenu').val(menuId);
+
+
+                        // Không cho chỉnh sửa dữ liệu
+                        $('#selectMenu').prop('disabled', false); // Lấy id của menu đc chọn là menu cha
+                        $('#selectCategory').prop('disabled', false);
+                        $('#menuName').prop('disabled', false);
+                        $('#levels').prop('disabled', false);
+                        $('#menuOrder').prop('disabled', false);
+                        $('#position').prop('disabled', false);
+                        $('#isActive').prop('readonly', false);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddMenu').show();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            })
+        });
+
+        $('#btnAdd').click(function () {
+            // gán title cho modal
+            $('#modal-title').text('Thêm mới');
+
+
+            // Làm trắng các input
+            //$('#selectMenu').val('');
+            //$('#selectCategory').val('');
+            $('#menuName').val('');
+            $('#levels').val('');
+            $('#menuOrder').val('');
+            $('#position').val('');
+            $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+
+            $('#idMenu').val('');
+
+
+            //
+            // Cho chỉnh sửa dữ liệu
+            $('#selectMenu').prop('disabled', false); // Lấy id của menu đc chọn là menu cha
+            $('#selectCategory').prop('disabled', false);
+            $('#menuName').prop('disabled', false);
+            $('#levels').prop('disabled', false);
+            $('#menuOrder').prop('disabled', false);
+            $('#position').prop('disabled', false);
+            $('#isActive').prop('readonly', false);
+
+            $('#btnAddMenu').show();
+
+        })
+
+        // THÊM MỚI MENU
+        // Sự kiện click của button xác nhận thêm mới menu
+        $('#btnAddMenu').click(function () {
+            // Lấy dữ diệu người dùng nhập vào
+            let parentId = $('#selectMenu').val().trim(); // Lấy id của menu đc chọn là menu cha
+            let categoryId = $('#selectCategory').val().trim();
+            let menuName = $('#menuName').val().trim();
+            let levels = $('#levels').val().trim();
+            let menuOrder = $('#menuOrder').val().trim();
+            let position = $('#position').val().trim();
+            let isActive = $('#isActive').prop('checked'); // Kiểm tra ô đánh dấu có được chọn hay không
+
+
+
+
+            // Các ràng buộc dữ liệu
+
+            // Kiểm tra rỗng
+            if (menuName.length == 0) {
+                alert('Vui lòng nhập tên menu');
+                return;
+            } else if (levels.length == 0) {
+                alert('Vui lòng nhập cấp menu');
+                return;
+            } else if (menuOrder.length == 0) {
+                alert('Vui lòng thứ tự sắp xếp menu');
+                return;
+            }
+            else if (position.length == 0) {
+                alert('Vui lòng nhập vị trí của menu');
+                return;
+            }
+
+
+            // Kiểm tra giá trị nhập vào có phải là NAN or là số âm hay không?
+            if (levels < 0) {
+                alert('Dữ liệu cấp nhập vào không được âm!');
+                return;
+            } else if (menuOrder < 0) {
+                alert('Thứ tự sắp xếp không nhận giá trị âm!');
+                return;
+            }
+
+            else if (position < 0) {
+                alert('Vị trí hiển thị menu không nhận giá trị âm!');
+                return;
+            }
+
+            // Kiểm tra không phải là số
+            if (isNaN(levels)) {
+                alert('Dữ liệu cấp nhập vào phải là số!');
+                return;
+            } else if (isNaN(menuOrder)) {
+                alert('Thứ tự sắp xếp nhập vào phải là số!');
+                return;
+            }
+
+            else if (isNaN(position) || position < 0) {
+                alert('Vị trí hiển thị nhập vào phải là số!');
+                return;
+            }
+
+            let idMenu = $('#idMenu').val().trim();
+
+            if (idMenu.length == 0) {
+                // Dùng ajax để thêm mới
+                $.ajax({
+                    url: '/Admin/AdminMenus/Create',
+                    type: 'post',
+                    data: {
+                        menuName: menuName,
+                        parentId: parentId,
+                        categoryId: categoryId,
+                        levels: levels,
+                        menuOrder: menuOrder,
+                        position: position,
+                        isActive: isActive
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+                             // Cập nhật thành công
+
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                            
+                            // Load lại ds
+                            LoadDsMenu();
+                            let menuName = $('#menuName').val('');
+                            let levels = $('#levels').val('');
+                            let menuOrder = $('#menuOrder').val('');
+                            let position = $('#position').val('');
+                            let isActive = $('#isActive').prop('checked', false); // Kiểm tra ô đánh dấu có được chọn hay không
+
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+            else {
+                // Cập nhật menu đã tồn tại
+                $.ajax({
+                    url: '/Admin/AdminMenus/Edit',
+                    type: 'post',
+                    data: {
+                        id: idMenu,
+                        menuName: menuName,
+                        parentId: parentId,
+                        categoryId: categoryId,
+                        levels: levels,
+                        menuOrder: menuOrder,
+                        position: position,
+                        isActive: isActive
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+                             // đóng modal
+
+                            $('#largeModal').modal('hide');
+                            
+                            // Cập nhật thành công
+         
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                           
+
+                            // Load lại danh sách lớp
+                            LoadDsMenu();
+
+                        } else {
+                             // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+
+        });
+        // Lấy danh sách danh mục dùng cho thẻ select có id là selectCategory
+        function LoadDsCategory() {
+            $.ajax({
+                url: '/Admin/AdminCategory/AllCategory',
+                type: 'GET',
+                success: function (data) {
+                    $('#selectCategory').empty(); // loại bỏ rỗng
+                    if (data.code == 200) {
+                        // Thêm tùy chọn mặc định với giá trị là 0 và đặt thuộc tính "selected"
+                        let optDefault = '<option value="0" selected>Chọn danh mục</option>';
+                        $('#selectCategory').append(optDefault);
+                        $.each(data.allCategory, function (k, v) {
+                            let opt = '<option value="' + v.categoryId + '">' + v.categoryName + '</option>';
+                            $('#selectCategory').append(opt);
+
+                        });
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            });
+        }
+        // Lấy danh sách menu cha dùng cho thẻ select có id là selectMenu
+
+        function LoadDsMenuParent() {
+            $.ajax({
+                url: '/Admin/AdminMenus/AllMenu',
+                type: 'GET',
+                success: function (data) {
+                    $('#selectMenu').empty(); // Tránh trường hợp bị nạp chồng
+
+                    if (data.code == 200) {
+                        // Thêm tùy chọn mặc định với giá trị là 0 và đặt thuộc tính "selected"
+                        let optDefault = '<option value="0" selected>Chọn menu cha</option>';
+                        $('#selectMenu').append(optDefault);
+
+                        // Thêm các tùy chọn menu cha
+                        $.each(data.allMenu, function (k, v) {
+                            let opt = '<option value="' + v.menuId + '">' + v.menuName + '</option>';
+                            $('#selectMenu').append(opt);
+                        });
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
+    </script>
+}

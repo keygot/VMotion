@@ -1,0 +1,406 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VMotion - Xem phim online</title>
+    <link rel="icon" href="~/assets/img/logo_vmotion.png">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/base.css">
+    <link rel="stylesheet" href="~/assets/css/mnc.css">
+    <link rel="stylesheet" href="~/assets/css/reponsive.css">
+    <link rel="stylesheet" href="~/assets/css/grid.css">
+    <link rel="stylesheet" href="~/assets/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/assets/fonts/themify-icons/themify-icons.css">
+    <link rel="stylesheet" href="~/assets/fonts/fontawesome-free-5.15.4-web/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!--swiperJS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+      @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+    <div class="main">
+        <div class="header" id="header">
+
+            @await Component.InvokeAsync("MenuLeftView")
+
+            <div class="header-right">
+                <div class="header__search">
+                    <div class="header__search-form">
+                        <input type="text" placeholder="Tìm kiếm..." class="header__search-input">
+                        <div class="header__icon-search">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="header__search-overlay"></div>
+                    <div class="header__search-history">
+                        <div class="header__search-history--title">
+                            Lịch sử tìm kiếm
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </div>
+
+                        <div class="header__search-history--tag">
+                            <a href="#" class="header__search-history--tag-link">
+                                <i class="fa fa-window-restore" aria-hidden="true"></i>
+                                ALL Videos
+                            </a>
+
+                            <a href="#" class="header__search-history--tag-link">
+                                K-Drama
+                            </a>
+
+                            <a href="#" class="header__search-history--tag-link">
+                                Japanese Anime
+                            </a>
+                        </div>
+
+                        <div class="header__search-popular">
+                            <div class="header__search-popular--title">Tìm kiếm hot</div>
+                            <div class="header__search-popular-list">
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number"
+                                          style="color: rgb(240, 17, 17);">1</span>
+                                    Jirisan
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number"
+                                          style="color: rgb(255, 132, 34);">2</span>
+                                    BORUTO-NARUTO NEXT GENERATIONS-
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number"
+                                          style="color: rgb(255, 174, 0);">3</span>
+                                    Danger Zone
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number">4</span>
+                                    Happiness
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number">5</span>
+                                    One Piece
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number">6</span>
+                                    Naruto
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number">7</span>
+                                    Crush
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number">8</span>
+                                    Fall in Love
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number">9</span>
+                                    PLOT LOVE
+                                </a>
+                                <a href="#" class="header__search-popular-item">
+                                    <span class="header__search-popular-number">10</span>
+                                    Unforgettable Love
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div class="header__icon-wrap header__nav-has-subnav">
+                    <div class="header-wrap-icon">
+                        <i class="fa fa-globe" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="header__icon-hover header__subnav-list header__language">
+                        <a href="#" class="header__language-link active">简体中文</a>
+                        <a href="#" class="header__language-link">Việt Nam</a>
+                        <a href="#" class="header__language-link">English</a>
+                    </div>
+                </div>
+
+                <div id="header__icon-wrap--login" class="header__icon-wrap header__nav-has-subnav">
+                    <div class="header-wrap-icon">
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="header__icon-hover header__subnav-list header__user">
+                        <p>Đăng nhập để theo dõi các nội dung mới nhất</p>
+                        <div class="header__user-btn">
+                            <button>Đăng nhập</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-vip header__nav-has-subnav">
+                    <div class="header__vip-btn">
+                        Đăng Ký
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <button class="backtop-btn" onclick='window.scrollTo({top: 0, behavior: "smooth"});'>
+            <i class="fas fa-chevron-up"></i>
+        </button>
+        <!-- Slider -->
+        
+
+        <!--End slider-->
+
+        
+
+            @RenderBody()
+
+      
+
+        <div class="footer">
+            <div class="footer-wrapper grid wide">
+                <div class="footer_top">
+                    <div class="footer_top-language">
+                        <i class="ti-world"></i>
+                        <span>Tiếng Việt</span>
+                    </div>
+
+                    <div class="footer_top-socials">
+                        <a href="#">
+                            <i class="fab fa-facebook-square"></i>
+                        </a>
+                        <a href="#">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#">
+                            <i class="fab fa-twitter-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                @await Component.InvokeAsync("MenuViewFooter");
+
+                <div class="footer_bottom">
+                    <div class="footer_getapp-link">
+                        <a href="#">
+                            <img src="~/assets/img/Apple.png" alt="">
+                        </a>
+                        <a href="#">
+                            <img src="~/assets/img/Google.png" alt="">
+                        </a>
+                    </div>
+
+                    <div class="footer_getapp-search">
+                        <div class="footer_getapp-keyword">
+                            <img src="~/assets/img/pc-footer-icon.png" alt="">
+                        </div>
+                        <span>Tìm kiếm trong cửa hàng thiết bị dành cho di động</span>
+
+                    </div>
+                    <div class="footer_copyright">
+                        <p>Chúng tôi sử dụng Cookies để cải thiện trải nghiệm sử dụng của bạn. Nếu bạn tiếp tục sử dụng trang web của chúng tôi, có nghĩa là bạn đồng ý chúng tôi sử dụng Cookies. Đọc <a href="#">Chính sách quyền riêng tư iQIYI </a></p>
+                        <p>Copyright © 2021 iQiyi All Rights Reserved</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="modal-login" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-container">
+                <div class="modal_close">
+                    <i class="fas fa-times"></i>
+                </div>
+
+                <div class="modal_header">
+                    <h3>Đăng nhập</h3>
+                    <h5> Bạn có thể quản lý tài khoản sau khi đăng nhập, có thể đồng bộ lịch sử xem và mục yêu thích trên nhiều đầu cuối. </h5>
+                </div>
+
+                <div class="modal_body">
+                    <div class="modal_login-btn modal-password">
+                        <span class="pass_modal-login--icon modal_password-icon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                        <span class="pass_modal-login--text modal_password-text">Đăng nhập bằng mật khẩu</span>
+                    </div>
+
+                    <div class="modal_login-btn modal-sms">
+                        <span class="pass_modal-login--icon modal_sms-icon"><i class="fa fa-mobile" aria-hidden="true"></i></span>
+                        <span class="pass_modal-login--text modal_sms-icon">Đăng nhập bằng SMS</span>
+                    </div>
+
+                    <div class="modal_login-btn modal-google">
+                        <span class="pass_modal-login--icon modal_gg-icon"><i class="fab fa-google" aria-hidden="true"></i></span>
+                        <span class="pass_modal-login--text modal_gg-icon">Đăng nhập bằng Google</span>
+                    </div>
+
+                    <div class="modal_login-btn modal-fb">
+                        <span class="pass_modal-login--icon modal_fb-icon"><i class="fab fa-facebook-square"></i></span>
+                        <span class="pass_modal-login--text modal_fb-icon">Đăng nhập bằng Facebook</span>
+                    </div>
+                </div>
+
+                <div id="registration" class="modal_footer">
+                    <p>
+                        Nhấn chọn " Đăng nhập " có nghĩa là bạn đã đọc và đồng ý
+                        <a href="#" target="_blank">Thỏa thuận quyền riêng tư</a>&
+                        <a href="#" target="_blank">Điều khoản dịch vụ</a>
+                        , đồng thời có nghĩa là bạn xác nhận đã tròn 13 tuổi có thể sử dụng dịch vụ của chúng tôi.
+                    </p>
+                    <div class="footer_login-tip">
+                        <span>Bạn đã có tài khoản?</span>
+                        <span class="registration-btn" style="color: var(--main-color);">Đăng ký</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-Registration" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="container_form-f8">
+                <div class="modal_close">
+                    <i class="fas fa-times"></i>
+                </div>
+                <form action="" method="POST" class="form" id="form-1">
+                    <h3 class="heading">Thành viên đăng ký</h3>
+                    <p class="desc">Xem phim mới nhất tại TV... ❤️</p>
+
+                    <div class="spacer"></div>
+
+                    <div class="form-group">
+                        <label for="fullname" class="form-label">Tên đầy đủ</label>
+                        <input id="fullname" name="fullname" type="text" placeholder="VD: Nhật Nguyễn Hữu" class="form-control">
+                        <span class="form-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
+                        <span class="form-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Mật khẩu</label>
+                        <input id="password" name="password" type="password" placeholder="Nhập mật khẩu" class="form-control">
+                        <span class="form-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirmation" class="form-label">Nhập lại mật khẩu</label>
+                        <input id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu" type="password" class="form-control">
+                        <span class="form-message"></span>
+                    </div>
+
+                    <!--
+                                        <div class="form-group">
+                                          <label for="province" class="form-label">Tỉnh/TP</label>
+                                          <select id="province" name="province" class="form-control">
+                                              <option value="">-- Chọn Tỉnh/TP --</option>
+                                              <option value="hni">Hà Nội</option>
+                                              <option value="hpg">Hải Phòng</option>
+                                          </select>
+                                          <span class="form-message"></span>
+                                        </div> -->
+
+                    <button class="form-submit">Đăng ký</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="modal_login-pass" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="container_form-f8">
+                <div class="modal_close">
+                    <i class="fas fa-times"></i>
+                </div>
+                <form action="" method="POST" class="form" id="form-2">
+                    <h3 class="heading">Đăng nhập</h3>
+                    <p class="desc">Xem phim cập nhật mới nhất tại TV... ❤️</p>
+
+                    <div class="spacer"></div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
+                        <span class="form-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Mật khẩu</label>
+                        <input id="password" name="password" type="password" placeholder="Nhập mật khẩu" class="form-control">
+                        <span class="form-message"></span>
+                    </div>
+
+                    <button class="form-submit">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mong muốn của chúng ta
+            Validator({
+                form: '#form-1',
+                formGroupSelector: '.form-group',
+                errorSelector: '.form-message',
+                rules: [
+                    Validator.isRequired('#fullname', 'Vui lòng nhập tên đầy đủ của bạn'),
+                    Validator.isEmail('#email'),
+                    Validator.minLength('#password', 6),
+                    Validator.isRequired('#password_confirmation'),
+                    Validator.isRequired('#province'),
+                    Validator.isConfirmed('#password_confirmation', function () {
+                        return document.querySelector('#form-1 #password').value;
+                    }, 'Mật khẩu nhập lại không chính xác')
+                ],
+                onSubmit: function (data) {
+                    // Call API
+                    console.log(data);
+                }
+            });
+
+
+            Validator({
+                form: '#form-2',
+                formGroupSelector: '.form-group',
+                errorSelector: '.form-message',
+                rules: [
+                    Validator.isEmail('#email'),
+                    Validator.minLength('#password', 6),
+                ],
+                onSubmit: function (data) {
+                    // Call API
+                    console.log(data);
+                }
+            });
+        });
+    </script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 3,
+            spaceBetween: 0,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
+    </script>
+
+    <script src="~/assets/js/app.js"></script>
+    <script src="~/assets/js/validator.js"></script>
+    @await RenderSectionAsync("Scripts", required: false);
+</body>
+
+</html>

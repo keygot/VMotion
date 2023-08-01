@@ -1,0 +1,200 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = VMotion
+build_property.RootNamespace = VMotion
+build_property.ProjectDir = D:\Workspace\2022-2023\HK2.1\DACN\Bản dự phòng\VMotion\VMotion\VMotion\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\Workspace\2022-2023\HK2.1\DACN\Bản dự phòng\VMotion\VMotion\VMotion
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminAccounts2/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5BY2NvdW50czJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminAccounts/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5BY2NvdW50c1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminAccounts/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5BY2NvdW50c1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminAccounts/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5BY2NvdW50c1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminAccounts/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5BY2NvdW50c1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminAccounts/EditProfile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5BY2NvdW50c1xFZGl0UHJvZmlsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminAccounts/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5BY2NvdW50c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminActors/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5BY3RvcnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminCategory/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5DYXRlZ29yeVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminDirectors/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5EaXJlY3RvcnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminEpisodes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5FcGlzb2Rlc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminLogin/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5Mb2dpblxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminMenus/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5NZW51c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminMovies/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5Nb3ZpZXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminMovies/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5Nb3ZpZXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminMovies/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5Nb3ZpZXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminMovies/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5Nb3ZpZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminPosts/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5Qb3N0c1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminRoles/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5Sb2xlc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/AdminSliders/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWRtaW5TbGlkZXJzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/FileManager/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRmlsZU1hbmFnZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/Shared/Components/AdminMenuView/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXENvbXBvbmVudHNcQWRtaW5NZW51Vmlld1xEZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/Shared/_AdminLayoutLogin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXF9BZG1pbkxheW91dExvZ2luLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/Shared/_SummerNote.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXF9TdW1tZXJOb3RlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Home/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Home/List.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMaXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/Components/ComingsoonView/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcQ29taW5nc29vblZpZXdcRGVmYXVsdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/Components/MenuLeftView/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcTWVudUxlZnRWaWV3XERlZmF1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/Components/MenuMobieView/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcTWVudU1vYmllVmlld1xEZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/Components/MenuViewFooter/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcTWVudVZpZXdGb290ZXJcRGVmYXVsdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/Components/PopularView/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcUG9wdWxhclZpZXdcRGVmYXVsdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/Components/RankView/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcUmFua1ZpZXdcRGVmYXVsdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/Components/SliderView/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcU2xpZGVyVmlld1xEZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Areas/Admin/Views/Shared/_AdminLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXF9BZG1pbkxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = b-r6ijei44kr
+
+[D:/Workspace/2022-2023/HK2.1/DACN/Bản dự phòng/VMotion/VMotion/VMotion/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-ilokljp3fe

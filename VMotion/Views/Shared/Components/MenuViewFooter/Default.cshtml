@@ -1,0 +1,44 @@
+﻿@using VMotion.Models;
+@using VMotion.Utilities;
+
+@model IList<TblMenu>
+
+<div class="footer_helpcenter row">
+    @foreach (var menu in Model.Where(m => m.Levels == 1).OrderBy(m => m.MenuOrder)) {
+        string url = Functions.TitleSlugGeneration("list", menu.MenuName, menu.MenuId);
+
+        if(!string.IsNullOrEmpty(menu.Link)) {
+            url = menu.Link;
+        }
+
+        var IDC1 = menu.MenuId;
+
+        var dsMenuC2 = Model.Where(m => m.ParentId == IDC1).OrderBy(m => m.MenuOrder).ToList();
+
+        @if(dsMenuC2.Count == 0) {
+            <div class="footer_helpcenter-section col l-3 m-6 c-12">
+                <h5 class="footer_helpcenter-title">@menu.MenuName</h5>
+               
+            </div>
+        }else {
+            <div class="footer_helpcenter-section col l-3 m-6 c-12">
+                <h5 class="footer_helpcenter-title">@menu.MenuName</h5>
+                <div class="footer_helpcenter-list">
+                    @foreach(var menu2 in dsMenuC2) {
+                        string url2 = Functions.TitleSlugGeneration("list", menu2.MenuName, menu2.MenuId);
+
+                        if(!string.IsNullOrEmpty(menu.Link)) {
+                            url2 = menu.Link;
+                        }
+                        <a href="/@url2" class="footer_helpcenter-item">@menu2.MenuName</a>
+                    }
+                 
+              
+                </div>
+            </div>
+        }
+    }
+
+   
+  
+</div>

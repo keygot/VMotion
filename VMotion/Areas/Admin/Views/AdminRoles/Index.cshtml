@@ -1,0 +1,526 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<VMotion.Models.TblRole>
+
+@{
+    
+    ViewData["Title"] = "Danh sách quyền truy cập" ;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div id="toastsContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1999;"></div>
+
+<div class="pagetitle">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Danh sách quyền truy cập </li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body" style="padding: 50px ;">
+                    
+                    <div class="row m-b-30" style="align-items: center; margin-bottom: 30px !important;">
+                        <div class="col-md-8">
+                            <div class="row" style="display: flex; align-items: center;">
+                               
+                                <div class="col-md-6 mb-3 header" style="box-shadow: none !important; display: flex; justify-content: center; align-items: center; z-index: 0 !important;">
+
+
+                                    <div class="search-bar" style="padding: 0 8px !important;">
+                                        <form class="search-form d-flex align-items-center" method="POST" action="#">
+                                            <input type="text" id="keyword" name="keyword" placeholder="Tìm kiếm" title="Enter search keyword">
+                                            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+
+@*
+                                    <select asp-items="@(new SelectList(ViewBag.RoleList, "Value", "Text"))" id="txtRoleID" name="txtRoleID" class="form-select" aria-label="Default select example">
+                                        
+                                    </select>*@
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" style="text-align: right !important;">
+                            <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" id="btnAdd" data-bs-target="#largeModal"><i class="bi bi-plus"></i> Thêm mới</button>
+
+                            @*THÊM MỚI Quyền *@
+                            <div class="modal fade" id="largeModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background: #0d6efd;">
+                                            <h5 class="modal-title"><strong style="color: #ffff;" id="modal-title"></strong></h5>
+                                            <button type="button" style="color: #ffff;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" style="text-align: left;">
+                                            <div class="col-lg-12">
+
+
+                                                <!-- Vertical Form -->
+                                                <form class="row g-3">
+                                                    <input hidden id="idRole" type="text" value="" />
+                                                    <div class="col-12">
+                                                        <label for="inputNanme4" class="form-label"><strong>Tên quyền</strong></label>
+                                                        <input type="text" class="form-control" id="roleName">
+                                                    </div>
+                                                    
+                                                    <div class="col-12">
+                                                        <label for="inputNanme4" class="form-label"><strong>Mô tả</strong></label>
+                                                        <input type="text" class="form-control" id="description">
+                                                    </div>
+
+
+
+                                                </form><!-- Vertical Form -->
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" id="btnAddRole">Lưu lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Large Modal-->
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover e-commerce-table" style="margin-bottom: 50px !important;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 1rem !important;">ID</th>
+                                    <th style="padding: 1rem !important;">Name</th>
+                                    <th style="padding: 1rem !important;">Description</th>
+                                    <th style="padding: 1rem !important;">#</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="dsRole" style="vertical-align:-webkit-baseline-middle !important;">
+                                
+
+
+                            </tbody>
+                        </table>
+
+                       @* <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+
+                                @if(Model.PageCount > 1) {
+                                    <pager class="pager-container" list="@Model" asp-area="Admin" asp-controller="AdminRoles" asp-route-roleid="@ViewBag.CurrentRoleId" asp-action="Index" options="PagedListRenderOptions.Bootstrap4PageNumbersOnly" />
+
+                                }
+                            </ul>
+                        </nav>*@
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        var trang = 1;
+
+        $(document).ready(function () {
+
+            // Load danh sách menu lên table
+            LoadDsRole(trang);
+
+
+            
+        });
+
+        // sự kiện click li phân trang
+        $('#phanTrang').on("click", "li", function (e) {
+            e.preventDefault(); // Bỏ mặc định link href
+            trang = $(this).text();
+            LoadDsMenu(trang);
+
+
+        });
+
+        // Phần này để tìm kiếm Danh sách menu
+        $("#keyword").keyup(function () {
+            var strkeyword = $('#keyword').val();
+            $.ajax({
+                url: '/Admin/Search/FindRoles/',
+                datatype: "json",
+                type: "POST",
+                data: { keyword: strkeyword },
+                async: true,
+                success: function (results) {
+                    $("#dsRole").html("");
+                    $("#dsRole").html(results);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            });
+        });
+
+        // Load danh sách Menu
+        function LoadDsRole(trang) {
+
+            $.ajax({
+                url: '/Admin/AdminRoles/DsRole',
+                type: 'GET',
+                data: {
+                    trang: trang,
+
+                },
+
+                success: function (data) {
+                    //console.log(data);
+
+                    if (data.code == 200) {
+
+                        $('#dsRole').empty();
+
+                        $.each(data.dsRole, function (key, value) {
+                            let tr = '<tr id="' + value.roleId + '">'
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.roleId + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.roleName + '</td>';
+                            tr += '<td style="padding: 1rem !important; vertical-align:-webkit-baseline-middle !important;">' + value.description + '</td>';
+                           
+
+                            tr += '<td style="min-width: 150px !important;">';
+                            tr += '<a class="btn btn-primary btn-sm" name="xem" data-bs-toggle="modal" data-bs-target="#largeModal" title ="xem"><i class="ri-eye-line" > </i></a >';
+                            tr += '<a class="btn btn-success btn-sm" name="edit" data-bs-toggle="modal" data-bs-target="#largeModal" title ="sửa" style="margin: 0 5px !important;"><i class="ri-edit-2-line"></i></a >';
+                            tr += '<a class="btn btn-danger btn-sm" name="delete" title = "xóa"><i class="bi bi-trash"></i></a >';
+
+                            tr += '</td>';
+
+                            tr += '</tr>';
+
+                            $('#dsRole').append(tr);
+                        });
+
+                        // Phân trang
+                        if (data.soTrang > 1) {
+                            $('#phanTrang').empty();
+
+                            for (i = 1; i <= data.soTrang; i++) {
+                                let li = '<li class="page-item" name="' + i + '"><a class="page-link" href="#">' + i + '</a></li>';
+
+                                $('#phanTrang').append(li);
+                            }
+
+                            let li = $('#phanTrang').find('li[name="' + trang + '"]');
+                            $(li).addClass('active');
+
+
+                            //if(trang == 1) {
+                            //    $('#phanTrang li:first').addClass('active');
+                            //}
+
+                        }
+                    }
+                }
+            });
+        }
+
+        //// XÓA ROLE
+        $(document).on('click', "a[name='delete']", function () {
+            let roleId = $(this).closest('tr').attr('id');
+
+            if(confirm("Bạn có thực sự muốn xóa trường này không?")) {
+                // dùng ajax để xóa lớp được chọn
+                $.ajax({
+                    url: '/Admin/AdminRoles/Delete',
+                    type: 'POST',
+                    data: {
+                        id: roleId,
+
+                    },
+                    success: function(data) {
+                        if(data.code == 200) {
+                            
+
+                            //Xóa thành công
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            //load lại ds
+                            LoadDsRole();
+                        }else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                    }
+                })
+            }
+        });
+
+
+        //// Chỉnh sửa ROLE
+        $(document).on('click', "a[name='edit']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Chỉnh sửa quyền');
+            let roleId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminRoles/Details',
+                type: 'GET',
+                data: {
+                    id: roleId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+
+                        $('#roleName').val(data.tblRoles.roleName);
+                        $('#description').val(data.tblRoles.description);
+
+                        // Gán giá trị cho text hidden có giá trị là idRole = roleId
+                        $('#idRole').val(roleId);
+
+
+                        // Không cho chỉnh sửa dữ liệu
+                        $('#roleName').prop('disabled', false); 
+                        $('#description').prop('disabled', false);
+                      
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddRole').show();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                    }
+                }
+            })
+        });
+
+
+        //// XEM CHI TIẾT MENU
+        $(document).on('click', "a[name='xem']", function () {
+            // gán title cho modal
+            $('#modal-title').text('Thông tin chi tiết');
+            let roleId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url: '/Admin/AdminRoles/Details',
+                type: 'GET',
+                data: {
+                    id: roleId
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        // Nếu lấy thông tin thành công
+
+                        
+                        $('#roleName').val(data.tblRoles.roleName);
+                        $('#description').val(data.tblRoles.description);
+                       
+
+
+                        // Không cho chỉnh sửa dữ liệu
+                        $('#roleName').prop('disabled', true); 
+                        $('#description').prop('disabled', true);
+
+
+                        // Gán giá trị cho text hidden có giá trị là idRole = roleId
+                        $('#idRole').val(roleId);
+
+                        // Ẩn nút lưu lại
+                        $('#btnAddRole').hide();
+
+                    } else {
+                        // Tạo phần tử thông báo thất bại
+                        var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                        // Thêm phần tử thông báo vào container toasts của Bootstrap
+                        var toastContainer = document.getElementById('toastsContainer');
+                        var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                        toastContainer.appendChild(successToast[0]);
+                        toast.show();
+                    }
+                }
+            })
+        });
+
+
+        $('#btnAdd').click(function () {
+            // gán title cho modal
+            $('#modal-title').text('Thêm mới');
+
+            // Làm trắng các input
+            $('#roleName').val('');
+            $('#description').val('');
+
+            // cho chỉnh sửa dữ liệu
+            $('#roleName').prop('disabled', false); 
+            $('#description').prop('disabled', false);
+
+
+
+            $('#idRole').val('');
+
+
+            //
+            
+            
+            $('#btnAddRole').show();
+
+        })
+
+
+
+        // THÊM MỚI ROLE
+        // Sự kiện click của button xác nhận thêm mới menu
+        $('#btnAddRole').click(function () {
+            // Lấy dữ diệu người dùng nhập vào
+            let roleName = $('#roleName').val().trim();
+            let description = $('#description').val().trim();
+           
+
+
+
+
+            // Các ràng buộc dữ liệu
+
+            // Kiểm tra rỗng
+            if (roleName.length == 0) {
+                alert('Vui lòng nhập tên quyền');
+                return;
+            } 
+
+            let idRole = $('#idRole').val().trim();
+
+            if (idRole.length == 0) {
+                // Dùng ajax để thêm mới
+                $.ajax({
+                    url: '/Admin/AdminRoles/Create',
+                    type: 'post',
+                    data: {
+                        roleName: roleName,
+                        description: description
+                       
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+                            
+                            // Thêm mới thành công
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+                            //Load lại ds
+                            LoadDsRole();
+                            let roleName = $('#roleName').val('');
+                            let description = $('#description').val('');
+                           
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+            else {
+                // Cập nhật menu đã tồn tại
+                $.ajax({
+                    url: '/Admin/AdminRoles/Edit',
+                    type: 'post',
+                    data: {
+                        id: idRole,
+                        roleName: roleName,
+                        description: description
+                    },
+                    success: function (data) {
+
+                        if (data.code == 200) {
+
+                            // đóng modal
+
+                            $('#largeModal').modal('hide');
+
+                            // Cập nhật thành công
+                            // Tạo phần tử thông báo thành công
+                            var successToast = $('<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+
+
+                           
+
+                            // Load lại danh sách lớp
+                            LoadDsRole();
+
+                        } else {
+                            // Tạo phần tử thông báo thất bại
+                            var successToast = $('<div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true"><div class="d-flex"><div class="toast-body">' + data.msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>');
+
+                            // Thêm phần tử thông báo vào container toasts của Bootstrap
+                            var toastContainer = document.getElementById('toastsContainer');
+                            var toast = new bootstrap.Toast(successToast[0], { autohide: true, delay: 5000 }); // Đặt thời gian tự động đóng là 5000ms (5 giây)
+                            toastContainer.appendChild(successToast[0]);
+                            toast.show();
+                        }
+                        //console.log(menuName, isActive);
+                    }
+
+                });
+            }
+
+        });
+
+
+
+    </script>
+
+  
+}

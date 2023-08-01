@@ -1,0 +1,73 @@
+﻿@using VMotion.Models;
+@using VMotion.Utilities;
+
+@model IList<TblMenu>
+
+<div class="header-left">
+
+    @*Menu này hiển thị trên điện thoại*@
+    @await Component.InvokeAsync("MenuMobieView");
+
+    @*Menu này hiển thị phần bên trái *@
+    <div class="header__left-logo">
+        <a asp-controller="Home" asp-action="Index">
+            <img src="~/assets/img/logo_vmotion.png" alt="IQiYi" class="header__logo-img">
+        </a>
+    </div>
+    <ul class="header__nav-list">
+
+        @foreach(var menu in Model.Where(m => m.Levels == 1).OrderBy(o => o.MenuOrder)) {
+
+            string url = Functions.TitleSlugGeneration("movies", menu.MenuName, menu.MenuId);
+
+            if (!string.IsNullOrEmpty(menu.Link)) {
+                url = menu.Link;            
+            }
+
+            var IDC1 = menu.MenuId;
+
+            var dsMenuC2 = Model.Where(p => (p.ParentId == IDC1)).OrderBy(p => p.MenuOrder).ToList();
+
+            @if(dsMenuC2.Count == 0) {
+                if(menu.MenuOrder == 1) {
+                    <li class="header__nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="header__nav-link selected">
+                            @menu.MenuName
+
+                        </a>
+                    </li>
+                }else {
+                    <li class="header__nav-item">
+                        <a href="/@url" class="header__nav-link">
+                            @menu.MenuName
+
+                        </a>
+                    </li>
+                }
+            }else {
+                <li class="header__nav-item header__nav-has-subnav">
+                    <a href="/@url" class="header__nav-link">
+                        @menu.MenuName
+                        <i class="icon-down arrow fa fa-angle-down" aria-hidden="true"></i>
+                    </a>
+
+                    <ul class="header__subnav-list">
+                        @foreach(var menu2 in dsMenuC2) {
+                            string url2 = Functions.TitleSlugGeneration("movies", menu2.MenuName, menu2.MenuId);
+
+                            if(!string.IsNullOrEmpty(menu2.Link)) {
+                                url = menu2.Link;
+                            }
+
+                            <li class="header__subnav-item"><a href="/@url" class="header__subnav-link">@menu2.MenuName</a></li>
+
+                        }
+                       
+                    </ul>
+                </li>
+            }
+        }
+
+        
+    </ul>
+</div>
